@@ -70,7 +70,6 @@ export function idColorToIndex(id: Uint8ClampedArray): number | undefined {
 export function getMarkerOptions(
   imageTopic: string,
   topics: readonly Topic[],
-  _allCameraNamespaces: string[],
   imageMarkerDatatypes: readonly string[],
 ): string[] {
   const results = [];
