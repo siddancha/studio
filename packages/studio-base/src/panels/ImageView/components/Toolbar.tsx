@@ -14,7 +14,7 @@ import { usePanelMousePresence } from "@foxglove/studio-base/hooks/usePanelMouse
 import { useJsonTreeTheme } from "@foxglove/studio-base/util/globalConstants";
 import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
 
-import { PixelData } from "./types";
+import { PixelData } from "../types";
 
 const style = {
   values: {
