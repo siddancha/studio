@@ -2,7 +2,14 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { MenuItem, Select, Checkbox, ListItemText, SelectChangeEvent } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  Checkbox,
+  ListItemText,
+  SelectChangeEvent,
+  ListItemIcon,
+} from "@mui/material";
 import { useMemo } from "react";
 
 type TopicDropdownItem = {
@@ -42,7 +49,12 @@ export function TopicDropdown(props: Props): JSX.Element {
         displayEmpty
         renderValue={(_selected) => title}
         size="small"
-        MenuProps={{ disablePortal: true }}
+        MenuProps={{
+          disablePortal: true,
+          MenuListProps: {
+            dense: true,
+          },
+        }}
         variant="outlined"
       >
         {items.length === 0 && (
@@ -52,7 +64,9 @@ export function TopicDropdown(props: Props): JSX.Element {
         )}
         {items.map((item) => (
           <MenuItem key={item.name} value={item.name} dense>
-            <Checkbox checked={selectedTopics.includes(item.name)} size="small" />
+            <ListItemIcon>
+              <Checkbox checked={selectedTopics.includes(item.name)} size="small" />
+            </ListItemIcon>
             <ListItemText primary={item.name} />
           </MenuItem>
         ))}

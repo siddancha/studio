@@ -125,6 +125,74 @@ export default function muiComponents(theme: Theme): ThemeOptions["components"] 
         },
       },
     },
+    MuiInputLabel: {
+      defaultProps: {
+        variant: "standard",
+        sx: { position: "relative" },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        inputSizeSmall: {
+          fontSize: theme.typography.body2.fontSize,
+        },
+        root: {
+          "&.MuiInput-root": {
+            marginTop: 0,
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: {
+          padding: theme.spacing(1, 1.25),
+        },
+        inputSizeSmall: {
+          padding: theme.spacing(0.75, 1),
+        },
+      },
+    },
+    MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+      styleOverrides: {
+        input: {
+          padding: theme.spacing(1, 1.25),
+        },
+        inputSizeSmall: {
+          padding: theme.spacing(0.75, 1),
+        },
+        root: {
+          borderRadius: theme.shape.borderRadius,
+
+          "&.Mui-focused": {
+            backgroundColor: theme.palette.action.focus,
+          },
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        input: {
+          padding: theme.spacing(1, 1.25),
+        },
+        inputSizeSmall: {
+          padding: theme.spacing(0.75, 1),
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        InputLabelProps: {
+          shrink: true,
+        },
+        InputProps: {
+          notched: false,
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 2,
