@@ -283,7 +283,7 @@ class ConsoleApi {
     start: string;
     end: string;
     topics: readonly string[];
-    outputFormat?: "bag1" | "mcap";
+    outputFormat?: "bag1" | "mcap0";
   }): Promise<{ link: string }> {
     return await this.post<{ link: string }>("/v1/data/stream", params);
   }

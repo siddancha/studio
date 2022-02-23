@@ -56,7 +56,7 @@ export default async function* streamMessages({
     start: toRFC3339String(params.start),
     end: toRFC3339String(params.end),
     topics: params.topics,
-    outputFormat: "mcap",
+    outputFormat: "mcap0",
   });
   if (signal.aborted) {
     return;
