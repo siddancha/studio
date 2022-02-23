@@ -24,22 +24,12 @@ type Props = {
   items: TopicDropdownItem[];
   multiple: boolean;
   size?: SelectProps["size"];
-  startAdornment?: SelectProps["startAdornment"];
-  iconOnly?: boolean;
 
   onChange: (activeTopics: string[]) => void;
 };
 
 export function TopicDropdown(props: Props): JSX.Element {
-  const {
-    items,
-    onChange,
-    multiple,
-    title,
-    size = "small",
-    iconOnly = false,
-    startAdornment,
-  } = props;
+  const { items, onChange, multiple, title, size = "small" } = props;
 
   const selectedTopics = useMemo<string[]>(() => {
     return items.filter((item) => item.selected).map((item) => item.name);
@@ -58,10 +48,9 @@ export function TopicDropdown(props: Props): JSX.Element {
         value={selectedTopics}
         disabled={items.length === 0}
         displayEmpty
-        renderValue={(_selected) => (!iconOnly ? title : undefined)}
+        renderValue={(_selected) => title}
         title={title}
         size={size}
-        startAdornment={startAdornment}
         onChange={handleChange}
         multiple={multiple}
         MenuProps={{

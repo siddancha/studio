@@ -13,7 +13,6 @@
 
 import { useTheme } from "@fluentui/react";
 import WavesIcon from "@mdi/svg/svg/waves.svg";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Stack, Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import cx from "classnames";
@@ -185,16 +184,7 @@ function ImageView(props: Props) {
       }
     }
 
-    return (
-      <TopicDropdown
-        startAdornment={<CameraAltIcon />}
-        multiple={false}
-        iconOnly={true}
-        title={cameraTopic}
-        items={items}
-        onChange={onChange}
-      />
-    );
+    return <TopicDropdown multiple={false} title={cameraTopic} items={items} onChange={onChange} />;
   }, [cameraTopic, allImageTopics, onChangeCameraTopic]);
 
   const cameraInfo = useCameraInfo(cameraTopic);
