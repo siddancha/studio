@@ -60,6 +60,7 @@ function FormElements(): JSX.Element {
           <Input placeholder="Standard Input" />
         </Grid>
       </Grid>
+
       <Grid container spacing={2} alignItems="flex-end">
         <Grid item>
           <OutlinedInput startAdornment={<VisibilityIcon />} placeholder="Outlined Input" />
