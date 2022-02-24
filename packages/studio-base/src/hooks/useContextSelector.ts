@@ -11,7 +11,7 @@
 //   found at http://www.apache.org/licenses/LICENSE-2.0
 //   You may not use this file except in compliance with the License.
 
-import { useRef, useLayoutEffect, useContext, useReducer } from "react";
+import { useLayoutEffect, useContext, useState } from "react";
 
 import { SelectableContext } from "@foxglove/studio-base/util/createSelectableContext";
 
@@ -31,35 +31,14 @@ export default function useContextSelector<T, U>(
     throw new Error(`useContextSelector was used outside a corresponding <Provider />.`);
   }
 
-  const [_, forceUpdate] = useReducer((x: number) => x + 1, 0);
-  const state = useRef<
-    Readonly<{ contextValue: T; selectedValue: U; selector: (value: T) => U }> | undefined
-  >();
-  const contextValue = handle.currentValue();
-  if (
-    state.current == undefined ||
-    contextValue !== state.current.contextValue ||
-    selector !== state.current.selector
-  ) {
-    state.current = {
-      contextValue,
-      selectedValue: selectWithUnstableIdentityWarning(contextValue, selector),
-      selector,
-    };
-  }
+  const [selectedValue, setSelectedValue] = useState<U>(() => {
+    return selectWithUnstableIdentityWarning(handle.currentValue(), selector);
+  });
 
-  // Subscribe to context updates, and trigger a re-render when the selected value changes.
   useLayoutEffect(() => {
     const sub = (newContextValue: T) => {
       const newSelectedValue = selectWithUnstableIdentityWarning(newContextValue, selector);
-      if (newSelectedValue !== state.current?.selectedValue) {
-        forceUpdate();
-      }
-      state.current = {
-        contextValue: newContextValue,
-        selectedValue: newSelectedValue,
-        selector,
-      };
+      setSelectedValue(() => newSelectedValue);
     };
     handle.addSubscriber(sub);
     return () => {
@@ -67,5 +46,5 @@ export default function useContextSelector<T, U>(
     };
   }, [handle, selector]);
 
-  return state.current.selectedValue;
+  return selectedValue;
 }
