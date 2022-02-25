@@ -102,6 +102,7 @@ function getMarkers({
     cubeList: (o) => markers.cubeList.push(o as Interactive<CubeListMarker>),
     cylinder: (o) => markers.cylinder.push(o as Interactive<CylinderMarker>),
     grid: (o) => markers.grid.push(o as unknown as Interactive<BaseMarker>),
+    dyngrid: (o) => markers.dyngrid.push(o as unknown as Interactive<BaseMarker>),
     instancedLineList: (o) =>
       markers.instancedLineList.push(o as unknown as Interactive<BaseMarker>),
     linedConvexHull: (o) =>
@@ -166,6 +167,7 @@ function World(
     cylinder: [],
     glText: [],
     grid: [],
+    dyngrid: [],
     instancedLineList: [],
     linedConvexHull: [],
     lineList: [],
