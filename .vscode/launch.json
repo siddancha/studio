@@ -5,6 +5,19 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    // Chrome debugging
+    {
+      "name": "Debug in Chrome",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///../../*": "${workspaceFolder}/*"
+      },
+      "smartStep": true
+    },
     {
       "name": "Attach to Chrome",
       "port": 9222,
@@ -25,6 +38,40 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true
+    },
+    // Electron debugging (run "Debug in Electron")
+    // Based on this: https://github.com/nklayman/electron-vscode-debug-example and https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/recipes.html#debugging-with-vscode
+    // Make sure ./node_modules/.bin/electron has executable permissions (chmod +x ./node_modules/.bin/electron)
+    {
+      "name": "Electron: Main",
+      "type": "pwa-node",
+      "request": "launch",
+      // "protocol": "inspector",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "runtimeArgs": ["--remote-debugging-port=9223", "desktop/.webpack"]
+    },
+    {
+      "name": "Electron: Renderer",
+      "type": "pwa-chrome",
+      "request": "attach",
+      "port": 9223,
+      "urlFilter": "http://localhost:*",
+      "timeout": 30000,
+      // "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///../../*": "${workspaceFolder}/*"
+      },
+      "smartStep": true
+    },
+  ],
+  "compounds": [
+    {
+      "name": "Debug in Electron",
+      "configurations": ["Electron: Main", "Electron: Renderer"]
     }
   ]
 }
