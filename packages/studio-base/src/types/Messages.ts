@@ -247,6 +247,15 @@ export type NavMsgs$OccupancyGrid = Readonly<{
   data: ReadonlyArray<number> | Readonly<Int8Array>;
 }>;
 
+export type DynMap$DynamicOccupancyGrid = Readonly<{
+  header: Header;
+  info: NavMsgs$MapMetaData;
+  max_velocity: number;
+  occupancy: number[] | Int8Array;
+  velocity_x: number[] | Int8Array;
+  velocity_z: number[] | Int8Array;
+}>;
+
 export type NavMsgs$Path = Readonly<{
   header: Header;
   poses: PoseStamped[];
@@ -260,6 +269,19 @@ export type OccupancyGridMessage = Readonly<{
   info: NavMsgs$MapMetaData;
   pose: MutablePose;
   data: ReadonlyArray<number> | Readonly<Int8Array>;
+}>;
+
+export type DynamicOccupancyGridMessage = Readonly<{
+  header: Header;
+  name: string;
+  type: 111;
+  alpha?: number;
+  info: NavMsgs$MapMetaData;
+  pose: MutablePose;
+  max_velocity: number;
+  occupancy: readonly number[];
+  velocity_x: readonly number[];
+  velocity_z: readonly number[];
 }>;
 
 export type TriangleListMarker = Readonly<
