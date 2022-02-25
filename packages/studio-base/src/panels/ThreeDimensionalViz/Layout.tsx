@@ -207,6 +207,8 @@ const SUPPORTED_MARKER_DATATYPES_SET = new Set([
   "foxglove_msgs/Grid",
   "foxglove_msgs/msg/Grid",
   "foxglove.Grid",
+  "dyn_map/DynamicOccupancyGrid",
+  "ros.dyn_map.DynamicOccupancyGrid",
   "nav_msgs/Path",
   "nav_msgs/msg/Path",
   "ros.nav_msgs.Path",
