@@ -50,6 +50,7 @@ import {
   Marker,
   Namespace,
   NavMsgs$OccupancyGrid,
+  DynMap$DynamicOccupancyGrid,
   NavMsgs$Path,
   MutablePose,
   Pose,
@@ -63,6 +64,7 @@ import {
   Header,
   InstancedLineListMarker,
   OccupancyGridMessage,
+  DynamicOccupancyGridMessage,
   PointCloud2,
   GeometryMsgs$PoseArray,
   LaserScan,
@@ -635,6 +637,49 @@ export default class SceneBuilder implements MarkerProvider {
     this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
   };
 
+  private _consumeDynamicOccupancyGrid = (topic: string, message: DynMap$DynamicOccupancyGrid): void => {
+    const type = 111;
+    const name = `${topic}/${type}`;
+
+    const { header, info, occupancy, velocity_x, velocity_z, max_velocity } = message;
+    if (info.width * info.height !== occupancy.length) {
+      this._setTopicError(
+        topic,
+        `DynamicOccupancyGrid data length (${occupancy.length}) does not match width*height (${info.width}x${info.height}).`,
+      );
+      return;
+    }
+    const mappedMessage = {
+      header: {
+        frame_id: header.frame_id,
+        stamp: header.stamp,
+        seq: header.seq,
+      },
+      info: {
+        map_load_time: info.map_load_time,
+        resolution: info.resolution,
+        width: info.width,
+        height: info.height,
+        origin: info.origin,
+      },
+      occupancy,
+      velocity_x,
+      velocity_z,
+      max_velocity,
+      type,
+      name,
+      pose: clonePose(info.origin),
+      frame_locked: false,
+      interactionData: { topic, originalMessage: message },
+    };
+
+    // if we neeed to flatten the ogrid clone the position and change the z to match the flattenedZHeightPose
+    if (mappedMessage.pose.position.z === 0 && this.flattenedZHeightPose && this.flatten) {
+      mappedMessage.pose.position.z = this.flattenedZHeightPose.position.z;
+    }
+    this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
+  };
+
   private _consumeNavMsgsPath = (topic: string, message: NavMsgs$Path): void => {
     const topicSettings = this._settingsByKey[`t:${topic}`];
 
@@ -882,6 +927,10 @@ export default class SceneBuilder implements MarkerProvider {
           this._setTopicError(topic, (err as Error).message);
         }
         break;
+      case "dyn_map/DynamicOccupancyGrid":
+      case "ros.dyn_map.DynamicOccupancyGrid":
+        this._consumeDynamicOccupancyGrid(topic, message as DynMap$DynamicOccupancyGrid);
+        break;
       case "nav_msgs/Path":
       case "nav_msgs/msg/Path":
       case "ros.nav_msgs.Path": {
@@ -1091,6 +1140,7 @@ export default class SceneBuilder implements MarkerProvider {
     let marker = originalMarker as
       | Marker
       | OccupancyGridMessage
+      | DynamicOccupancyGridMessage
       | PointCloud2
       | (NormalizedPose & { type: 103 })
       | (NormalizedPoseArray & { type: 111; pose: Pose });
@@ -1119,6 +1169,7 @@ export default class SceneBuilder implements MarkerProvider {
       case 110: // ColorMarker
       case 111: // PoseArray
       case 101: // OccupancyGridMessage
+      case 111: // DynamicOccupancyGrid
         marker = { ...marker, pose };
         break;
       default:
@@ -1179,6 +1230,8 @@ export default class SceneBuilder implements MarkerProvider {
         return add.triangleList(marker);
       case 101:
         return add.grid(marker);
+      case 111:
+        return add.dyngrid(marker);
       case 102: {
         // PointCloud decoding requires x, y, and z fields and will fail if all are not present.
         // We check for the fields here so we can present the user with a topic error prior to decoding.
