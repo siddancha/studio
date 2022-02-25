@@ -188,6 +188,8 @@ const SUPPORTED_MARKER_DATATYPES_SET = new Set([
   "nav_msgs/OccupancyGrid",
   "nav_msgs/msg/OccupancyGrid",
   "ros.nav_msgs.OccupancyGrid",
+  "dyn_map/DynamicOccupancyGrid",
+  "ros.dyn_map.DynamicOccupancyGrid",
   "nav_msgs/Path",
   "nav_msgs/msg/Path",
   "ros.nav_msgs.Path",

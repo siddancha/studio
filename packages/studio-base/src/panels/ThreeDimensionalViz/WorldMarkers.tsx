@@ -29,6 +29,7 @@ import { GLTextMarker } from "@foxglove/studio-base/panels/ThreeDimensionalViz/S
 import {
   Cover,
   OccupancyGrids,
+  DynamicOccupancyGrids,
   PointClouds,
   PoseMarkers,
   LinedConvexHulls,
@@ -73,6 +74,7 @@ export type InteractiveMarkersByType = {
   cylinder: Interactive<CylinderMarker>[];
   glText: Interactive<GLTextMarker>[];
   grid: Interactive<BaseMarker>[];
+  dyngrid: Interactive<BaseMarker>[];
   instancedLineList: Interactive<BaseMarker>[];
   linedConvexHull: Interactive<LineListMarker | LineStripMarker>[];
   lineList: Interactive<LineListMarker>[];
@@ -156,6 +158,7 @@ export default function WorldMarkers({
     cylinder,
     glText,
     grid,
+    dyngrid,
     instancedLineList,
     linedConvexHull,
     lineList,
@@ -199,6 +202,9 @@ export default function WorldMarkers({
       <OccupancyGrids layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
         {grid}
       </OccupancyGrids>
+      <DynamicOccupancyGrids layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
+        {dyngrid}
+      </DynamicOccupancyGrids>
       {/* Render PointClouds first so other markers with the same zIndex can show on top of PointClouds. */}
       <PointClouds layerIndex={layerIndex} clearCachedMarkers={clearCachedMarkers}>
         {pointcloud}
