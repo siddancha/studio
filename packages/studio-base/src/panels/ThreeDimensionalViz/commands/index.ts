@@ -13,5 +13,6 @@
 export { default as Cover } from "./Cover";
 export { default as PoseMarkers } from "./PoseMarkers";
 export { default as OccupancyGrids } from "./OccupancyGrids";
+export { default as DynamicOccupancyGrids } from "./DynamicOccupancyGrids";
 export { default as PointClouds } from "./PointClouds";
 export { default as LinedConvexHulls } from "./LinedConvexHulls";
