@@ -60,14 +60,31 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
 
     uniform sampler2D data;
 
+    // taken from https://stackoverflow.com/a/17897228/1814274
+    vec3 hsv2rgb(vec3 c)
+    {
+      vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+      vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+      return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+    }
+
     void main () {
       // look up the point in our data texture corresponding to
       // the current point being shaded
       vec4 point = texture2D(data, uv);
 
-      // use occupancy only for now
-      float t = 1.0 - point.r * 2.55;
-      gl_FragColor = vec4(t, t, t, vAlpha);
+      float  o = point.r * 2.55; // lies in [ 0, 1]
+      float vx = point.g * 2.04 - 1.0; // lies in [-1, 1]
+      float vz = point.b * 2.04 - 1.0; // lies in [-1, 1]
+
+      // compute hsv from occupancy and velocity
+      // TODO: computing hsv on the CPU instead of the GPU might speed things up
+      float h = 0.5 + 0.5 * (atan(vz, vx) / 3.14159265359);  // lies in [0, 1]
+      float s = min(sqrt(vx * vx + vz * vz), 1.0); // lies in [0, 1]
+      float v = o;  // lies in [0, 1]
+
+      vec3 color = hsv2rgb(vec3(h, s, v));
+      gl_FragColor = vec4(color.r, color.g, color.b, vAlpha);
     }
     `,
     blend: defaultBlend,
