@@ -101,7 +101,8 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
       resolution: regl.prop("info.resolution"),
       // make alpha a uniform so in the future it can be controlled by topic settings
       alpha: (_context, props) => {
-        return props.alpha ?? 0.5;
+        // TODO: expose a topic setting in studio so that the user can control this
+        return props.alpha ?? 1.0;
       },
       data: (_context: unknown, props: DynamicOccupancyGridMessage) => {
         return cache.get(props);
