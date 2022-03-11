@@ -1,10 +1,7 @@
 import type REGL from "regl";
 
 import { Command, withPose, defaultBlend, CommonCommandProps } from "@foxglove/regl-worldview";
-import {
-  defaultMapPalette,
-  TextureCacheDynGrid,
-} from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
+import { TextureCacheDynGrid } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
 import { DynamicOccupancyGridMessage } from "@foxglove/studio-base/types/Messages";
 
 type Uniforms = {
@@ -12,7 +9,6 @@ type Uniforms = {
   height: number;
   resolution: number;
   alpha: number;
-  palette: REGL.Texture2D;
   data: REGL.Texture2D;
 };
 type Attributes = {
@@ -26,7 +22,6 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
   const positionBuffer = regl.buffer([0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0]);
 
   const cache = new TextureCacheDynGrid(regl);
-  const paletteTextures = new Map<Uint8Array, REGL.Texture2D>();
 
   return withPose<Uniforms, Attributes, CommandProps, Record<string, never>, REGL.DefaultContext>({
     primitive: "triangle strip",
@@ -63,7 +58,6 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
     varying vec2 uv;
     varying float vAlpha;
 
-    uniform sampler2D palette;
     uniform sampler2D data;
 
     void main () {
@@ -71,11 +65,9 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
       // the current point being shaded
       vec4 point = texture2D(data, uv);
 
-      // vec2(point.a, 0.5) is similar to textelFetch for webGL 1.0
-      // it looks up a point along our 1 dimentional palette
-      // http://www.lighthouse3d.com/tutorials/glsl-tutorial/texture-coordinates/
-      gl_FragColor = texture2D(palette, vec2(point.a, 0.5));
-      gl_FragColor.a *= vAlpha;
+      // use occupancy only for now
+      float t = 1.0 - point.r * 2.55;
+      gl_FragColor = vec4(t, t, t, vAlpha);
     }
     `,
     blend: defaultBlend,
@@ -93,25 +85,6 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
       // make alpha a uniform so in the future it can be controlled by topic settings
       alpha: (_context, props) => {
         return props.alpha ?? 0.5;
-      },
-      palette: (_context: unknown, _props: DynamicOccupancyGridMessage) => {
-        const palette = defaultMapPalette;
-        // track which palettes we've uploaded as textures
-        let texture = paletteTextures.get(palette);
-        if (texture) {
-          return texture;
-        }
-        // if we haven't already uploaded this palette, upload it to the GPU
-        texture = regl.texture({
-          format: "rgba",
-          type: "uint8",
-          mipmap: false,
-          data: palette,
-          width: 256,
-          height: 1,
-        });
-        paletteTextures.set(palette, texture);
-        return texture;
       },
       data: (_context: unknown, props: DynamicOccupancyGridMessage) => {
         return cache.get(props);

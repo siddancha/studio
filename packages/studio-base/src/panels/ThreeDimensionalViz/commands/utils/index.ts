@@ -163,11 +163,20 @@ class TextureCacheEntryDynGrid {
       return this.texture;
     }
     this.marker = marker;
-    const { info, occupancy } = marker;
+    const { info, occupancy, velocity_x, velocity_z } = marker;
+
+    const data = new Uint8Array(3 * occupancy.length);
+    for (let i = 0; i < occupancy.length; i++)
+    {
+      data[3 * i + 0] = occupancy[i]!;  // in [0, 100]
+      data[3 * i + 1] = 125 + velocity_x[i]!;  // now in [0, 250]
+      data[3 * i + 2] = 125 + velocity_z[i]!;  // now in [0, 250]
+    }
+
     this.texture = this.texture({
-      format: "alpha",
+      format: "rgb",
       mipmap: false,
-      data: toTypedArray(occupancy),
+      data: data,
       width: info.width,
       height: info.height,
     });
