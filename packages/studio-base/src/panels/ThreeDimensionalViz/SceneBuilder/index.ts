@@ -48,9 +48,11 @@ import { FoxgloveMessages } from "@foxglove/studio-base/types/FoxgloveMessages";
 import {
   Color,
   Marker,
+  GridMessage,
   Namespace,
   NavMsgs$OccupancyGrid,
   DynMap$DynamicOccupancyGrid,
+  DynMap$VisibilityGrid,
   NavMsgs$Path,
   MutablePose,
   Pose,
@@ -63,8 +65,6 @@ import {
   Point,
   Header,
   InstancedLineListMarker,
-  OccupancyGridMessage,
-  DynamicOccupancyGridMessage,
   PointCloud2,
   GeometryMsgs$PoseArray,
   LaserScan,
@@ -680,6 +680,46 @@ export default class SceneBuilder implements MarkerProvider {
     this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
   };
 
+  private _consumeVisibilityGrid = (topic: string, message: DynMap$VisibilityGrid): void => {
+    const type = 112;
+    const name = `${topic}/${type}`;
+
+    const { header, info, visibility } = message;
+    if (info.width * info.height !== visibility.length) {
+      this._setTopicError(
+        topic,
+        `VisibilityGrid data length (${visibility.length}) does not match width*height (${info.width}x${info.height}).`,
+      );
+      return;
+    }
+    const mappedMessage = {
+      header: {
+        frame_id: header.frame_id,
+        stamp: header.stamp,
+        seq: header.seq,
+      },
+      info: {
+        map_load_time: info.map_load_time,
+        resolution: info.resolution,
+        width: info.width,
+        height: info.height,
+        origin: info.origin,
+      },
+      visibility,
+      type,
+      name,
+      pose: clonePose(info.origin),
+      frame_locked: false,
+      interactionData: { topic, originalMessage: message },
+    };
+
+    // if we neeed to flatten the ogrid clone the position and change the z to match the flattenedZHeightPose
+    if (mappedMessage.pose.position.z === 0 && this.flattenedZHeightPose && this.flatten) {
+      mappedMessage.pose.position.z = this.flattenedZHeightPose.position.z;
+    }
+    this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
+  };
+
   private _consumeNavMsgsPath = (topic: string, message: NavMsgs$Path): void => {
     const topicSettings = this._settingsByKey[`t:${topic}`];
 
@@ -701,7 +741,7 @@ export default class SceneBuilder implements MarkerProvider {
       color: topicSettings?.overrideColor ?? { r: 0.5, g: 0.5, b: 1, a: 1 },
     };
     this._consumeNonMarkerMessage(topic, newMessage, 4 /* line strip */, message);
-  };
+  }
 
   private _consumePoseListAsLine = (topic: string, message: NormalizedPoseArray): void => {
     const topicSettings = this._settingsByKey[`t:${topic}`] as PoseListSettings | undefined;
@@ -931,6 +971,10 @@ export default class SceneBuilder implements MarkerProvider {
       case "ros.dyn_map.DynamicOccupancyGrid":
         this._consumeDynamicOccupancyGrid(topic, message as DynMap$DynamicOccupancyGrid);
         break;
+      case "dyn_map/VisibilityGrid":
+      case "ros.dyn_map.VisibilityGrid":
+        this._consumeVisibilityGrid(topic, message as DynMap$VisibilityGrid);
+        break;
       case "nav_msgs/Path":
       case "nav_msgs/msg/Path":
       case "ros.nav_msgs.Path": {
@@ -1139,8 +1183,7 @@ export default class SceneBuilder implements MarkerProvider {
   ) {
     let marker = originalMarker as
       | Marker
-      | OccupancyGridMessage
-      | DynamicOccupancyGridMessage
+      | GridMessage
       | PointCloud2
       | (NormalizedPose & { type: 103 })
       | (NormalizedPoseArray & { type: 111; pose: Pose });
@@ -1170,6 +1213,7 @@ export default class SceneBuilder implements MarkerProvider {
       case 111: // PoseArray
       case 101: // OccupancyGridMessage
       case 111: // DynamicOccupancyGrid
+      case 112: // VisibilityGrid
         marker = { ...marker, pose };
         break;
       default:
@@ -1232,6 +1276,8 @@ export default class SceneBuilder implements MarkerProvider {
         return add.grid(marker);
       case 111:
         return add.dyngrid(marker);
+      case 112:
+        return add.visgrid(marker);
       case 102: {
         // PointCloud decoding requires x, y, and z fields and will fail if all are not present.
         // We check for the fields here so we can present the user with a topic error prior to decoding.
