@@ -1,7 +1,7 @@
 import type REGL from "regl";
 
 import { Command, withPose, defaultBlend, CommonCommandProps } from "@foxglove/regl-worldview";
-import { TextureCacheDynGrid } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
+import { TextureCache } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
 import { DynamicOccupancyGridMessage } from "@foxglove/studio-base/types/Messages";
 
 type Uniforms = {
@@ -16,12 +16,33 @@ type Attributes = {
 };
 type CommandProps = DynamicOccupancyGridMessage;
 
+function getTextureOptions(marker:DynamicOccupancyGridMessage): REGL.Texture2DOptions
+{
+  const { info, occupancy, velocity_x, velocity_z } = marker;
+
+  const data = new Uint8Array(3 * occupancy.length);
+  for (let i = 0; i < occupancy.length; i++)
+  {
+    data[3 * i + 0] = occupancy[i]!;  // in [0, 100]
+    data[3 * i + 1] = 125 + velocity_x[i]!;  // now in [0, 250]
+    data[3 * i + 2] = 125 + velocity_z[i]!;  // now in [0, 250]
+  }
+
+  return {
+    format: "rgb",
+    mipmap: false,
+    data: data,
+    width: info.width,
+    height: info.height,
+  };
+}
+
 const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
   // make a buffer holding the verticies of a 1x1 plane
   // it will be resized in the shader
   const positionBuffer = regl.buffer([0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0]);
 
-  const cache = new TextureCacheDynGrid(regl);
+  const cache = new TextureCache(regl, getTextureOptions);
 
   return withPose<Uniforms, Attributes, CommandProps, Record<string, never>, REGL.DefaultContext>({
     primitive: "triangle strip",
