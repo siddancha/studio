@@ -27,6 +27,7 @@ import {
   TriangleListMarker,
   OccupancyGridMessage,
   DynamicOccupancyGridMessage,
+  VisibilityGridMessage,
   PointCloud,
   InstancedLineListMarker,
   ColorMarker,
@@ -69,6 +70,7 @@ export interface MarkerCollector {
   triangleList(arg0: TriangleListMarker): void;
   grid(arg0: OccupancyGridMessage): void;
   dyngrid(arg0: DynamicOccupancyGridMessage): void;
+  visgrid(arg0: VisibilityGridMessage): void;
   pointcloud(arg0: PointCloud): void;
   linedConvexHull(arg0: LineListMarker | LineStripMarker): void;
   instancedLineList(arg0: InstancedLineListMarker): void;
