@@ -12,8 +12,9 @@
 //   You may not use this file except in compliance with the License.
 import type REGL from "regl";
 import tinycolor from "tinycolor2";
+import { toolsColorScheme } from "@foxglove/studio-base/util/toolsColorScheme";
 
-import { OccupancyGridMessage, DynamicOccupancyGridMessage } from "@foxglove/studio-base/types/Messages";
+import { GridMessage } from "@foxglove/studio-base/types/Messages";
 
 export const COLORS = {
   BLACK: tinycolor("black"),
@@ -77,10 +78,25 @@ export const defaultMapPalette = (() => {
   return buff;
 })();
 
+export const visibilityPalette = (() => {
+
+  const buff = new Uint8Array(256 * 4);
+
+  // visibility color coding
+  setRgba(buff, 0 * 4, tinycolor("red"));     // KNOWN_OCCUPIED  , red
+  setRgba(buff, 1 * 4, tinycolor("blue"));    // KNOWN_FREE      , blue
+  setRgba(buff, 2 * 4, tinycolor("white"));   // UNKNOWN_OCCUPIED, white
+  setRgba(buff, 3 * 4, tinycolor("black"));   // UNKNOWN_FREE    , black
+  setRgba(buff, 4 * 4, tinycolor("gray"));    // UNKNOWN         , gray
+  setRgba(buff, 5 * 4, tinycolor(toolsColorScheme.purple.dark));  // OUTSIDE_FOV, purple
+
+  return buff;
+})();
+
 // convert a number array to a typed array
 // passing a typed array to regl is orders of magnitude
 // faster than passing a number[] and letting regl do the conversion
-function toTypedArray(data: readonly number[] | Int8Array): Uint8Array {
+export function toTypedArray(data: readonly number[] | Int8Array): Uint8Array {
   if (data instanceof Int8Array) {
     return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
   }
@@ -91,24 +107,18 @@ function toTypedArray(data: readonly number[] | Int8Array): Uint8Array {
   return result;
 }
 
-class TextureCacheEntry {
-  marker: OccupancyGridMessage;
+class TextureCacheEntry<Marker extends GridMessage> {
+  marker: Marker;
   texture: REGL.Texture2D;
   // regl context
   regl: REGL.Regl;
+  getTextureOptions: (marker: Marker) => REGL.Texture2DOptions;
 
-  constructor(regl: REGL.Regl, marker: OccupancyGridMessage) {
+  constructor(regl: REGL.Regl, getTextureOptions: (marker: Marker) => REGL.Texture2DOptions, marker: Marker) {
     this.marker = marker;
     this.regl = regl;
-    const { info, data } = marker;
-
-    this.texture = regl.texture({
-      format: "alpha",
-      mipmap: false,
-      data: toTypedArray(data),
-      width: info.width,
-      height: info.height,
-    });
+    this.getTextureOptions = getTextureOptions;
+    this.texture = regl.texture(this.getTextureOptions(marker));
   }
 
   // get the texture for a marker
@@ -116,117 +126,36 @@ class TextureCacheEntry {
   // generate a new texture, otherwise keep the old one
   // uploading new texture data to the gpu is something
   // you only want to do when required - it takes several milliseconds
-  getTexture(marker: OccupancyGridMessage) {
+  getTexture(marker: Marker) {
     if (this.marker === marker) {
       return this.texture;
     }
     this.marker = marker;
-    const { info, data } = marker;
-    this.texture = this.texture({
-      format: "alpha",
-      mipmap: false,
-      data: toTypedArray(data),
-      width: info.width,
-      height: info.height,
-    });
+    this.texture = this.texture(this.getTextureOptions(marker));
     return this.texture;
   }
 }
 
-class TextureCacheEntryDynGrid {
-  marker: DynamicOccupancyGridMessage;
-  texture: REGL.Texture2D;
-  // regl context
-  regl: REGL.Regl;
-
-  constructor(regl: REGL.Regl, marker: DynamicOccupancyGridMessage) {
-    this.marker = marker;
-    this.regl = regl;
-    const { info, occupancy } = marker;
-
-    this.texture = regl.texture({
-      format: "alpha",
-      mipmap: false,
-      data: toTypedArray(occupancy),
-      width: info.width,
-      height: info.height,
-    });
-  }
-
-  // get the texture for a marker
-  // if the marker is not the same reference
-  // generate a new texture, otherwise keep the old one
-  // uploading new texture data to the gpu is something
-  // you only want to do when required - it takes several milliseconds
-  getTexture(marker: DynamicOccupancyGridMessage) {
-    if (this.marker === marker) {
-      return this.texture;
-    }
-    this.marker = marker;
-    const { info, occupancy, velocity_x, velocity_z } = marker;
-
-    const data = new Uint8Array(3 * occupancy.length);
-    for (let i = 0; i < occupancy.length; i++)
-    {
-      data[3 * i + 0] = occupancy[i]!;  // in [0, 100]
-      data[3 * i + 1] = 125 + velocity_x[i]!;  // now in [0, 250]
-      data[3 * i + 2] = 125 + velocity_z[i]!;  // now in [0, 250]
-    }
-
-    this.texture = this.texture({
-      format: "rgb",
-      mipmap: false,
-      data: data,
-      width: info.width,
-      height: info.height,
-    });
-    return this.texture;
-  }
-}
-
-export class TextureCache {
+export class TextureCache<Marker extends GridMessage> {
   store: {
-    [key: string]: TextureCacheEntry;
+    [key: string]: TextureCacheEntry<Marker>;
   } = {};
   // regl context
   regl: REGL.Regl;
+  getTextureOptions: (marker: Marker) => REGL.Texture2DOptions;
 
-  constructor(regl: REGL.Regl) {
+  constructor(regl: REGL.Regl, getTextureOptions: (marker: Marker) => REGL.Texture2DOptions) {
     this.regl = regl;
+    this.getTextureOptions = getTextureOptions;
   }
 
   // returns a regl texture for a given marker
-  get(marker: OccupancyGridMessage): REGL.Texture2D {
+  get(marker: Marker): REGL.Texture2D {
     const { name } = marker;
     const item = this.store[name];
     if (!item) {
       // if the item is missing initialize a new entry
-      const entry = new TextureCacheEntry(this.regl, marker);
-      this.store[name] = entry;
-      return entry.texture;
-    }
-    return item.getTexture(marker);
-  }
-}
-
-export class TextureCacheDynGrid {
-  store: {
-    [key: string]: TextureCacheEntryDynGrid;
-  } = {};
-  // regl context
-  regl: REGL.Regl;
-
-  constructor(regl: REGL.Regl) {
-    this.regl = regl;
-  }
-
-  // returns a regl texture for a given marker
-  get(marker: DynamicOccupancyGridMessage): REGL.Texture2D {
-    const { name } = marker;
-    const item = this.store[name];
-    if (!item) {
-      // if the item is missing initialize a new entry
-      const entry = new TextureCacheEntryDynGrid(this.regl, marker);
+      const entry = new TextureCacheEntry<Marker>(this.regl, this.getTextureOptions, marker);
       this.store[name] = entry;
       return entry.texture;
     }

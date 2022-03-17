@@ -1,25 +1,8 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
-//
-// This file incorporates work covered by the following copyright and
-// permission notice:
-//
-//   Copyright 2018-2021 Cruise LLC
-//
-//   This source code is licensed under the Apache License, Version 2.0,
-//   found at http://www.apache.org/licenses/LICENSE-2.0
-//   You may not use this file except in compliance with the License.
-
 import type REGL from "regl";
 
 import { Command, withPose, defaultBlend, CommonCommandProps } from "@foxglove/regl-worldview";
-import {
-  defaultMapPalette,
-  TextureCache,
-  toTypedArray
-} from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
-import { OccupancyGridMessage } from "@foxglove/studio-base/types/Messages";
+import { visibilityPalette, TextureCache } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/utils";
+import { VisibilityGridMessage } from "@foxglove/studio-base/types/Messages";
 
 type Uniforms = {
   width: number;
@@ -32,22 +15,22 @@ type Uniforms = {
 type Attributes = {
   point: REGL.Buffer;
 };
-type CommandProps = OccupancyGridMessage;
+type CommandProps = VisibilityGridMessage;
 
-export function getTextureOptions(marker: OccupancyGridMessage): REGL.Texture2DOptions
+export function getTextureOptions(marker: VisibilityGridMessage): REGL.Texture2DOptions
 {
-  const { info, data } = marker;
+  const { info, visibility } = marker;
 
   return {
     format: "alpha",
     mipmap: false,
-    data: toTypedArray(data),
+    data: visibility,
     width: info.width,
     height: info.height,
   };
 }
 
-const occupancyGrids = (regl: REGL.Regl) => {
+const visibilityGrids = (regl: REGL.Regl) => {
   // make a buffer holding the verticies of a 1x1 plane
   // it will be resized in the shader
   const positionBuffer = regl.buffer([0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0]);
@@ -119,10 +102,10 @@ const occupancyGrids = (regl: REGL.Regl) => {
       resolution: regl.prop("info.resolution"),
       // make alpha a uniform so in the future it can be controlled by topic settings
       alpha: (_context, props) => {
-        return props.alpha ?? 0.5;
+        return props.alpha ?? 1.0;
       },
-      palette: (_context: unknown, _props: OccupancyGridMessage) => {
-        const palette = defaultMapPalette;
+      palette: (_context: unknown, _props: VisibilityGridMessage) => {
+        const palette = visibilityPalette;
         // track which palettes we've uploaded as textures
         let texture = paletteTextures.get(palette);
         if (texture) {
@@ -140,7 +123,7 @@ const occupancyGrids = (regl: REGL.Regl) => {
         paletteTextures.set(palette, texture);
         return texture;
       },
-      data: (_context: unknown, props: OccupancyGridMessage) => {
+      data: (_context: unknown, props: VisibilityGridMessage) => {
         return cache.get(props);
       },
     },
@@ -155,7 +138,7 @@ type Props = CommonCommandProps & {
   children: React.ReactNode;
 };
 
-export default function OccupancyGrids(props: Props): JSX.Element {
-  // We can click through OccupancyGrids.
-  return <Command getChildrenForHitmap={undefined} {...props} reglCommand={occupancyGrids} />;
+export default function VisibilityGrids(props: Props): JSX.Element {
+  // We can click through VisibilityGrids.
+  return <Command getChildrenForHitmap={undefined} {...props} reglCommand={visibilityGrids} />;
 }

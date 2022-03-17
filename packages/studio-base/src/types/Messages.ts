@@ -251,9 +251,15 @@ export type DynMap$DynamicOccupancyGrid = Readonly<{
   header: Header;
   info: NavMsgs$MapMetaData;
   max_velocity: number;
-  occupancy: number[] | Int8Array;
-  velocity_x: number[] | Int8Array;
-  velocity_z: number[] | Int8Array;
+  occupancy: Int8Array;
+  velocity_x: Int8Array;
+  velocity_z: Int8Array;
+}>;
+
+export type DynMap$VisibilityGrid = Readonly<{
+  header: Header;
+  info: NavMsgs$MapMetaData;
+  visibility: Uint8Array;
 }>;
 
 export type NavMsgs$Path = Readonly<{
@@ -279,9 +285,19 @@ export type DynamicOccupancyGridMessage = Readonly<{
   info: NavMsgs$MapMetaData;
   pose: MutablePose;
   max_velocity: number;
-  occupancy: readonly number[];
-  velocity_x: readonly number[];
-  velocity_z: readonly number[];
+  occupancy: Int8Array;
+  velocity_x: Int8Array;
+  velocity_z: Int8Array;
+}>;
+
+export type VisibilityGridMessage = Readonly<{
+  header: Header;
+  name: string;
+  type: 112;
+  alpha?: number;
+  info: NavMsgs$MapMetaData;
+  pose: MutablePose;
+  visibility: Uint8Array;
 }>;
 
 export type TriangleListMarker = Readonly<
@@ -323,6 +339,11 @@ export type Marker =
   | MeshMarker
   | InstancedLineListMarker
   | ColorMarker;
+
+export type GridMessage =
+  | OccupancyGridMessage
+  | DynamicOccupancyGridMessage
+  | VisibilityGridMessage;
 
 export type MarkerArray = Readonly<{
   markers: readonly Marker[];
