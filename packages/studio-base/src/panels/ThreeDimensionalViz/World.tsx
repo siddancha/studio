@@ -103,6 +103,7 @@ function getMarkers({
     cylinder: (o) => markers.cylinder.push(o as Interactive<CylinderMarker>),
     grid: (o) => markers.grid.push(o as unknown as Interactive<BaseMarker>),
     dyngrid: (o) => markers.dyngrid.push(o as unknown as Interactive<BaseMarker>),
+    visgrid: (o) => markers.visgrid.push(o as unknown as Interactive<BaseMarker>),
     instancedLineList: (o) =>
       markers.instancedLineList.push(o as unknown as Interactive<BaseMarker>),
     linedConvexHull: (o) =>
@@ -168,6 +169,7 @@ function World(
     glText: [],
     grid: [],
     dyngrid: [],
+    visgrid: [],
     instancedLineList: [],
     linedConvexHull: [],
     lineList: [],
