@@ -104,6 +104,7 @@ function getMarkers({
     grid: (o) => markers.grid.push(o as unknown as Interactive<BaseMarker>),
     dyngrid: (o) => markers.dyngrid.push(o as unknown as Interactive<BaseMarker>),
     visgrid: (o) => markers.visgrid.push(o as unknown as Interactive<BaseMarker>),
+    lcmesh: (o) => markers.lcmesh.push(o as unknown as Interactive<BaseMarker>),
     instancedLineList: (o) =>
       markers.instancedLineList.push(o as unknown as Interactive<BaseMarker>),
     linedConvexHull: (o) =>
@@ -170,6 +171,7 @@ function World(
     grid: [],
     dyngrid: [],
     visgrid: [],
+    lcmesh: [],
     instancedLineList: [],
     linedConvexHull: [],
     lineList: [],

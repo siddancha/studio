@@ -94,7 +94,7 @@ const dynamicOoccupancyGrids = (regl: REGL.Regl) => {
       // the current point being shaded
       vec4 point = texture2D(data, uv);
 
-      float  o = point.r * 2.55; // lies in [ 0, 1]
+      float  o = point.r * 2.55; // lies in [0, 1]
       float vx = point.g * 2.04 - 1.0; // lies in [-1, 1]
       float vz = point.b * 2.04 - 1.0; // lies in [-1, 1]
 

@@ -28,6 +28,7 @@ import {
   OccupancyGridMessage,
   DynamicOccupancyGridMessage,
   VisibilityGridMessage,
+  LightCurtainMesh,
   PointCloud,
   InstancedLineListMarker,
   ColorMarker,
@@ -81,6 +82,7 @@ export interface MarkerCollector {
   grid(arg0: OccupancyGridMessage): void;
   dyngrid(arg0: DynamicOccupancyGridMessage): void;
   visgrid(arg0: VisibilityGridMessage): void;
+  lcmesh(arg0: LightCurtainMesh): void;
   pointcloud(arg0: PointCloud): void;
   linedConvexHull(arg0: LineListMarker | LineStripMarker): void;
   instancedLineList(arg0: InstancedLineListMarker): void;
