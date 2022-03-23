@@ -53,6 +53,7 @@ import {
   NavMsgs$OccupancyGrid,
   DynMap$DynamicOccupancyGrid,
   DynMap$VisibilityGrid,
+  LCDriver$LightCurtainMesh,
   NavMsgs$Path,
   MutablePose,
   Pose,
@@ -69,6 +70,7 @@ import {
   GeometryMsgs$PoseArray,
   LaserScan,
   PointField,
+  LightCurtainMesh,
 } from "@foxglove/studio-base/types/Messages";
 import { clonePose, emptyPose } from "@foxglove/studio-base/util/Pose";
 import { mightActuallyBePartial } from "@foxglove/studio-base/util/mightActuallyBePartial";
@@ -720,6 +722,37 @@ export default class SceneBuilder implements MarkerProvider {
     this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
   };
 
+  private _consumeLightCurtainMesh = (topic: string, message: LCDriver$LightCurtainMesh): void => {
+    const type = 113;
+    const name = `${topic}/${type}`;
+
+    const { header, width, height, mesh_data } = message;
+    if (3 * width * height !== mesh_data.length) {
+      this._setTopicError(
+        topic,
+        `LightCurtainMesh has data length (${mesh_data.length}) does not match 3*width*height (3x${width}x${height}).`,
+      );
+      return;
+    }
+    const mappedMessage = {
+      header: {
+        frame_id: header.frame_id,
+        stamp: header.stamp,
+        seq: header.seq,
+      },
+      width,
+      height,
+      mesh_data,
+      type,
+      name,
+      pose: emptyPose(),
+      frame_locked: false,
+      interactionData: { topic, originalMessage: message },
+    };
+
+    this.collectors[topic]!.addNonMarker(topic, mappedMessage as unknown as Interactive<unknown>);
+  };
+
   private _consumeNavMsgsPath = (topic: string, message: NavMsgs$Path): void => {
     const topicSettings = this._settingsByKey[`t:${topic}`];
 
@@ -965,6 +998,10 @@ export default class SceneBuilder implements MarkerProvider {
       case "ros.dyn_map.VisibilityGrid":
         this._consumeVisibilityGrid(topic, message as DynMap$VisibilityGrid);
         break;
+      case "lc_driver/LightCurtainMesh":
+      case "ros.lc_driver.LightCurtainMesh":
+        this._consumeLightCurtainMesh(topic, message as LCDriver$LightCurtainMesh);
+        break;
       case "nav_msgs/Path":
       case "nav_msgs/msg/Path":
       case "ros.nav_msgs.Path": {
@@ -1167,6 +1204,7 @@ export default class SceneBuilder implements MarkerProvider {
   ) {
     let marker = originalMarker as
       | Marker
+      | LightCurtainMesh
       | GridMessage
       | PointCloud2
       | (NormalizedPose & { type: 103 })
@@ -1198,6 +1236,7 @@ export default class SceneBuilder implements MarkerProvider {
       case 101: // OccupancyGridMessage
       case 111: // DynamicOccupancyGrid
       case 112: // VisibilityGrid
+      case 113: // LightCurtainMesh
         marker = { ...marker, pose };
         break;
       default:
@@ -1262,6 +1301,8 @@ export default class SceneBuilder implements MarkerProvider {
         return add.dyngrid(marker);
       case 112:
         return add.visgrid(marker);
+      case 113:
+        return add.lcmesh(marker);
       case 102: {
         // PointCloud decoding requires x, y, and z fields and will fail if all are not present.
         // We check for the fields here so we can present the user with a topic error prior to decoding.
