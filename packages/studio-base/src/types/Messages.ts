@@ -262,6 +262,13 @@ export type DynMap$VisibilityGrid = Readonly<{
   visibility: Uint8Array;
 }>;
 
+export type LCDriver$LightCurtainMesh = Readonly<{
+  header: Header;
+  width: number;
+  height: number;
+  mesh_data: Float32Array;
+}>;
+
 export type NavMsgs$Path = Readonly<{
   header: Header;
   poses: PoseStamped[];
@@ -298,6 +305,18 @@ export type VisibilityGridMessage = Readonly<{
   info: NavMsgs$MapMetaData;
   pose: MutablePose;
   visibility: Uint8Array;
+}>;
+
+export type LightCurtainMesh = Readonly<{
+  header: Header;
+  name: string;
+  type: 113;
+  alpha?: number;
+  color?: Color;
+  pose: MutablePose;
+  width: number;
+  height: number;
+  mesh_data: Float32Array;
 }>;
 
 export type TriangleListMarker = Readonly<

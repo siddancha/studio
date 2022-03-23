@@ -31,6 +31,7 @@ import {
   OccupancyGrids,
   DynamicOccupancyGrids,
   VisibilityGrids,
+  LightCurtainMeshs,
   PointClouds,
   PoseMarkers,
   LinedConvexHulls,
@@ -80,6 +81,7 @@ export type InteractiveMarkersByType = {
   grid: Interactive<BaseMarker>[];
   dyngrid: Interactive<BaseMarker>[];
   visgrid: Interactive<BaseMarker>[];
+  lcmesh: Interactive<BaseMarker>[];
   instancedLineList: Interactive<BaseMarker>[];
   linedConvexHull: Interactive<LineListMarker | LineStripMarker>[];
   lineList: Interactive<LineListMarker>[];
@@ -168,6 +170,7 @@ export default function WorldMarkers({
     grid,
     dyngrid,
     visgrid,
+    lcmesh,
     instancedLineList,
     linedConvexHull,
     lineList,
@@ -217,6 +220,9 @@ export default function WorldMarkers({
       <VisibilityGrids layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
         {visgrid}
       </VisibilityGrids>
+      <LightCurtainMeshs layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
+        {lcmesh}
+      </LightCurtainMeshs>
       {/* Render PointClouds first so other markers with the same zIndex can show on top of PointClouds. */}
       <PointClouds layerIndex={layerIndex} clearCachedMarkers={clearCachedMarkers}>
         {pointcloud}
