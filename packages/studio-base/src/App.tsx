@@ -81,6 +81,8 @@ function AppContent(props: AppProps): JSX.Element {
 }
 
 export default function App(props: AppProps): JSX.Element {
+  return <AppContent {...props} />;
+
   const isDesktop = isDesktopApp();
   const [globalLaunchPreference = "unknown"] = useAppConfigurationValue<string>(
     AppSetting.LAUNCH_PREFERENCE,
