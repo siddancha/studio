@@ -5,6 +5,7 @@ import {
   withPose,
   defaultBlend,
   CommonCommandProps,
+  Vec3,
   Vec4,
   toRGBA
 } from "@foxglove/regl-worldview";
@@ -20,6 +21,11 @@ type Attributes = {
 };
 type CommandProps = LightCurtainMesh;
 
+function bufferLength(marker: LightCurtainMesh): number {
+  const { width, height } = marker;
+  return (width - 1) * (height - 1) * 18;  // rectangles * 2 (triangles) * 3 (vertices) * 3 (floats)
+}
+
 class BufferCacheEntry {
   marker: LightCurtainMesh;
   buffer: REGL.Buffer;
@@ -32,32 +38,44 @@ class BufferCacheEntry {
     this.buffer = regl.buffer(this.getVertices(marker));
   }
 
-  getVertices(marker: LightCurtainMesh): number[]
+  getVertices(marker: LightCurtainMesh): Float32Array
   {
-    // const { width, height, mesh_data } = marker;
+    const { width, height, mesh_data } = marker;
 
-    // const data = new Uint8Array(3 * occupancy.length);
-    // for (let i = 0; i < occupancy.length; i++)
-    // {
-    //   data[3 * i + 0] = occupancy[i]!;  // in [0, 100]
-    //   data[3 * i + 1] = 125 + velocity_x[i]!;  // now in [0, 250]
-    //   data[3 * i + 2] = 125 + velocity_z[i]!;  // now in [0, 250]
-    // }
+    function getPoint(r: number, c: number): Vec3
+    {
+      const start = (r * width + c) * 3;
+      return [mesh_data[start], mesh_data[start + 1], mesh_data[start + 2]] as Vec3;
+    }
 
-    // return {
-    //   format: "rgb",
-    //   mipmap: false,
-    //   data: data,
-    //   width: info.width,
-    //   height: info.height,
-    // };
+    const vertices = new Float32Array(bufferLength(marker));
+    let p = 0;
 
-    return [0, 10, 0,
-            10, 10, 0,
-            0, 0, 0,
-            10, 10, 0,
-            0, 0, 0,
-            10, 0, 0];
+    function addPoints(...points: Vec3[])
+    {
+      for (const point of points)
+      {
+        vertices[p++] = point[0];
+        vertices[p++] = point[1];
+        vertices[p++] = point[2];
+      };
+    }
+
+    for (let r = 0; r < height - 1; r++)
+    {
+      for (let c = 0; c < width - 1; c++)
+      {
+        const point1: Vec3 = getPoint(r,   c  );
+        const point2: Vec3 = getPoint(r,   c+1);
+        const point3: Vec3 = getPoint(r+1, c  );
+        const point4: Vec3 = getPoint(r+1, c+1);
+
+        addPoints(point1, point2, point3);  // triangle 1
+        addPoints(point2, point3, point4);  // triangle 2
+      }
+    }
+
+    return vertices;
   }
 
   // get the buffer for a marker
@@ -155,7 +173,7 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
       }
     },
 
-    count: (_context, props: LightCurtainMesh) => 18
+    count: (_context, props: LightCurtainMesh) => bufferLength(props)
   });
 };
 
