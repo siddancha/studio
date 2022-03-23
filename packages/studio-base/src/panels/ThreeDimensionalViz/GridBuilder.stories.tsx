@@ -35,6 +35,7 @@ import {
   OccupancyGridMessage,
   DynamicOccupancyGridMessage,
   VisibilityGridMessage,
+  LightCurtainMesh,
   PointCloud,
   PointsMarker,
   SphereListMarker,
@@ -76,8 +77,9 @@ class MockMarkerCollector implements MarkerCollector {
   mesh(_arg0: MeshMarker): void {}
   triangleList(_arg0: TriangleListMarker): void {}
   grid(_arg0: OccupancyGridMessage): void {}
-  dyngrid(_arg0: DynamicOccupancyGridMessage): void {};
-  visgrid(_arg0: VisibilityGridMessage): void {};
+  dyngrid(_arg0: DynamicOccupancyGridMessage): void {}
+  visgrid(_arg0: VisibilityGridMessage): void {}
+  lcmesh(_arg0: LightCurtainMesh): void {}
   pointcloud(_arg0: PointCloud): void {}
   linedConvexHull(_arg0: LineListMarker | LineStripMarker): void {}
   instancedLineList(_arg0: InstancedLineListMarker): void {}
