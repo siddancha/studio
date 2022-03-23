@@ -199,6 +199,8 @@ const SUPPORTED_MARKER_DATATYPES_SET = new Set([
   "ros.dyn_map.DynamicOccupancyGrid",
   "dyn_map/VisibilityGrid",
   "ros.dyn_map.VisibilityGrid",
+  "lc_driver/LightCurtainMesh",
+  "ros.lc_driver.LightCurtainMesh",
   "nav_msgs/Path",
   "nav_msgs/msg/Path",
   "ros.nav_msgs.Path",
