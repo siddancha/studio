@@ -205,7 +205,9 @@ export default function Workspace(props: WorkspaceProps): JSX.Element {
   >(isPlayerPresent || !showOpenDialogOnStartup || showSignInForm ? undefined : { view: "start" });
 
   const [selectedSidebarItem, setSelectedSidebarItem] = useState<SidebarItemKey | undefined>(
-    "connection",
+    // change made by @siddancha: always start with the connection sidebase closed.
+    undefined,
+    // "connection",
   );
 
   // When a player is present we hide the connection sidebar. To prevent hiding the connection sidebar
