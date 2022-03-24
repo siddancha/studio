@@ -40,12 +40,12 @@ class BufferCacheEntry {
 
   getVertices(marker: LightCurtainMesh): Float32Array
   {
-    const { width, height, mesh_data } = marker;
+    const { width, height, data } = marker;
 
     function getPoint(r: number, c: number): Vec3
     {
       const start = (r * width + c) * 3;
-      return [mesh_data[start], mesh_data[start + 1], mesh_data[start + 2]] as Vec3;
+      return [data[start], data[start + 1], data[start + 2]] as Vec3;
     }
 
     const vertices = new Float32Array(bufferLength(marker));
