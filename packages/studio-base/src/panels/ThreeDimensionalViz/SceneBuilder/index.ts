@@ -714,11 +714,11 @@ export default class SceneBuilder implements MarkerProvider {
     const type = 113;
     const name = `${topic}/${type}`;
 
-    const { header, width, height, mesh_data } = message;
-    if (3 * width * height !== mesh_data.length) {
+    const { header, width, height, data } = message;
+    if (3 * width * height !== data.length) {
       this._setTopicError(
         topic,
-        `LightCurtainMesh has data length (${mesh_data.length}) does not match 3*width*height (3x${width}x${height}).`,
+        `LightCurtainMesh has data length (${data.length}) does not match 3*width*height (3x${width}x${height}).`,
       );
       return;
     }
@@ -730,7 +730,7 @@ export default class SceneBuilder implements MarkerProvider {
       },
       width,
       height,
-      mesh_data,
+      data,
       type,
       name,
       pose: emptyPose(),

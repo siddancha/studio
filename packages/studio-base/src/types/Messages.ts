@@ -258,7 +258,7 @@ export type LCDriver$LightCurtainMesh = Readonly<{
   header: Header;
   width: number;
   height: number;
-  mesh_data: Float32Array;
+  data: Float32Array;
 }>;
 
 export type NavMsgs$Path = Readonly<{
@@ -308,7 +308,7 @@ export type LightCurtainMesh = Readonly<{
   pose: MutablePose;
   width: number;
   height: number;
-  mesh_data: Float32Array;
+  data: Float32Array;
 }>;
 
 export type TriangleListMarker = Readonly<
