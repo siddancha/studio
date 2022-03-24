@@ -192,6 +192,9 @@ export default function Workspace(props: WorkspaceProps): JSX.Element {
   >(isPlayerPresent || !showOpenDialogOnStartup ? undefined : { view: "start" });
 
   const [selectedSidebarItem, setSelectedSidebarItem] = useState<SidebarItemKey | undefined>(() => {
+    // change made by @siddancha: always start with the connection sidebase closed.
+    return undefined;
+
     // When using the open dialog ui - we always start with the connection sidebar open.
     // This is to help the user find where to select a connection should they dismiss the open dialog
     if (enableOpenDialog === true) {
