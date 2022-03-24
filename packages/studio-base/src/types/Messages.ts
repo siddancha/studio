@@ -296,7 +296,7 @@ export type OccupancyGridMessage = Readonly<{
 export type DynamicOccupancyGridMessage = Readonly<{
   header: Header;
   name: string;
-  type: 111;
+  type: 201;
   alpha?: number;
   info: NavMsgs$MapMetaData;
   pose: MutablePose;
@@ -309,7 +309,7 @@ export type DynamicOccupancyGridMessage = Readonly<{
 export type VisibilityGridMessage = Readonly<{
   header: Header;
   name: string;
-  type: 112;
+  type: 202;
   alpha?: number;
   info: NavMsgs$MapMetaData;
   pose: MutablePose;
@@ -319,7 +319,7 @@ export type VisibilityGridMessage = Readonly<{
 export type LightCurtainMesh = Readonly<{
   header: Header;
   name: string;
-  type: 113;
+  type: 203;
   alpha?: number;
   color?: Color;
   pose: MutablePose;

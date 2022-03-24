@@ -640,7 +640,7 @@ export default class SceneBuilder implements MarkerProvider {
   };
 
   private _consumeDynamicOccupancyGrid = (topic: string, message: DynMap$DynamicOccupancyGrid): void => {
-    const type = 111;
+    const type = 201;
     const name = `${topic}/${type}`;
 
     const { header, info, occupancy, velocity_x, velocity_z, max_velocity } = message;
@@ -683,7 +683,7 @@ export default class SceneBuilder implements MarkerProvider {
   };
 
   private _consumeVisibilityGrid = (topic: string, message: DynMap$VisibilityGrid): void => {
-    const type = 112;
+    const type = 202;
     const name = `${topic}/${type}`;
 
     const { header, info, visibility } = message;
@@ -723,7 +723,7 @@ export default class SceneBuilder implements MarkerProvider {
   };
 
   private _consumeLightCurtainMesh = (topic: string, message: LCDriver$LightCurtainMesh): void => {
-    const type = 113;
+    const type = 203;
     const name = `${topic}/${type}`;
 
     const { header, width, height, data } = message;
@@ -1234,9 +1234,9 @@ export default class SceneBuilder implements MarkerProvider {
       case 110: // ColorMarker
       case 111: // PoseArray
       case 101: // OccupancyGridMessage
-      case 111: // DynamicOccupancyGrid
-      case 112: // VisibilityGrid
-      case 113: // LightCurtainMesh
+      case 201: // DynamicOccupancyGrid
+      case 202: // VisibilityGrid
+      case 203: // LightCurtainMesh
         marker = { ...marker, pose };
         break;
       default:
@@ -1297,11 +1297,11 @@ export default class SceneBuilder implements MarkerProvider {
         return add.triangleList(marker);
       case 101:
         return add.grid(marker);
-      case 111:
+      case 201:
         return add.dyngrid(marker);
-      case 112:
+      case 202:
         return add.visgrid(marker);
-      case 113:
+      case 203:
         return add.lcmesh(marker);
       case 102: {
         // PointCloud decoding requires x, y, and z fields and will fail if all are not present.
