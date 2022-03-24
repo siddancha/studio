@@ -21,9 +21,9 @@ type Attributes = {
 };
 type CommandProps = LightCurtainMesh;
 
-function bufferLength(marker: LightCurtainMesh): number {
+function numVertices(marker: LightCurtainMesh): number {
   const { width, height } = marker;
-  return (width - 1) * (height - 1) * 18;  // rectangles * 2 (triangles) * 3 (vertices) * 3 (floats)
+  return (width - 1) * (height - 1) * 6;  // rectangles * 2 (triangles) * 3 (vertices)
 }
 
 class BufferCacheEntry {
@@ -48,7 +48,7 @@ class BufferCacheEntry {
       return [data[start], data[start + 1], data[start + 2]] as Vec3;
     }
 
-    const vertices = new Float32Array(bufferLength(marker));
+    const vertices = new Float32Array(numVertices(marker) * 3);
     let p = 0;
 
     function addPoints(...points: Vec3[])
@@ -173,7 +173,7 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
       }
     },
 
-    count: (_context, props: LightCurtainMesh) => bufferLength(props)
+    count: (_context, props: LightCurtainMesh) => numVertices(props)
   });
 };
 
