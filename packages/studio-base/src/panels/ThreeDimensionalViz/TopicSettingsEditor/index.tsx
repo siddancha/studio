@@ -23,6 +23,7 @@ import OccupancyGridSettingsEditor from "./OccupancyGridSettingsEditor";
 import PointCloudSettingsEditor from "./PointCloudSettingsEditor";
 import PoseListSettingsEditor from "./PoseListSettingsEditor";
 import PoseSettingsEditor from "./PoseSettingsEditor";
+import LightCurtainMeshSettingsEditor from "./LightCurtainMeshSettingsEditor"
 
 export type { TopicSettingsEditorProps } from "./types";
 
@@ -73,6 +74,9 @@ export function topicSettingsEditorForDatatype(datatype: string):
     ["foxglove_msgs/Grid", OccupancyGridSettingsEditor],
     ["foxglove_msgs/msg/Grid", OccupancyGridSettingsEditor],
     ["foxglove.Grid", OccupancyGridSettingsEditor],
+    ["lc_driver/LightCurtainMesh", LightCurtainMeshSettingsEditor],
+    ["lc_driver/msg/LightCurtainMesh", LightCurtainMeshSettingsEditor],
+    ["ros.lc_driver.LightCurtainMesh", LightCurtainMeshSettingsEditor],
   ]);
 
   return editors.get(datatype) as
