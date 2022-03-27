@@ -726,6 +726,8 @@ export default class SceneBuilder implements MarkerProvider {
     const type = 203;
     const name = `${topic}/${type}`;
 
+    const { alpha } = (this._settingsByKey[`t:${topic}`] ?? {}) as { alpha?: number };
+
     const { header, width, height, data } = message;
     if (3 * width * height !== data.length) {
       this._setTopicError(
@@ -745,6 +747,7 @@ export default class SceneBuilder implements MarkerProvider {
       data,
       type,
       name,
+      alpha,
       pose: emptyPose(),
       frame_locked: false,
       interactionData: { topic, originalMessage: message },
