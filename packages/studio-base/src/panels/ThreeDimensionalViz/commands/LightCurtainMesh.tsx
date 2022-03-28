@@ -20,7 +20,7 @@ type Attributes = {
 };
 type CommandProps = LightCurtainMesh;
 
-export const DEFAULT_COLOR = { r: 0, g: 0, b: 1, a: 0.3 };  // default is blue with 30% opacity
+export const DEFAULT_COLOR = { r: 0, g: 0, b: 1, a: 0.6 };  // default is blue with 60% opacity
 
 function numVertices(marker: LightCurtainMesh): number {
   const { width, height } = marker;
