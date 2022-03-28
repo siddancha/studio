@@ -89,7 +89,7 @@ export const defaultLayout: PanelsState =
       "useThemeBackgroundColor": true
     },
     "ImageViewPanel!9fxu36": {
-      "cameraTopic": "/lc_ve/cwheel",
+      "cameraTopic": "/lc_image",
       "customMarkerTopicOptions": [],
       "enabledMarkerTopics": [],
       "mode": "fit",
@@ -108,13 +108,13 @@ export const defaultLayout: PanelsState =
       "cameraState": {
         "distance": 23.19650664585766,
         "perspective": true,
-        "phi": 0.9852501611737355,
+        "phi": 0.8146753528049449,
         "targetOffset": [
           -2.540010984185039,
           3.7684042429831304,
           0
         ],
-        "thetaOffset": 0.029398362128546657,
+        "thetaOffset": 0.03785502174799692,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
@@ -122,7 +122,9 @@ export const defaultLayout: PanelsState =
       "checkedKeys": [
         "name:Topics",
         "t:/registered_scan",
-        "t:/lc_cloud"
+        "t:/lc_cloud",
+        "t:/lc_mesh",
+        "t:/lc_dets"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -158,6 +160,26 @@ export const defaultLayout: PanelsState =
           },
           "pointSize": 1,
           "pointShape": "square"
+        },
+        "t:/lc_dets": {
+          "colorMode": {
+            "mode": "gradient",
+            "colorField": "intensity",
+            "minValue": 0,
+            "maxValue": 255,
+            "minColor": {
+              "r": 0,
+              "g": 0,
+              "b": 1,
+              "a": 1
+            },
+            "maxColor": {
+              "r": 0,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
         }
       },
       "useThemeBackgroundColor": true
@@ -291,32 +313,19 @@ export const defaultLayout: PanelsState =
       "transformMarkers": false,
       "zoom": 1
     },
-    "ImageViewPanel!1zvzdo3": {
-      "cameraTopic": "/lc_ve/cwheel",
-      "enabledMarkerTopics": [],
-      "mode": "fit",
-      "pan": {
-        "x": 0,
-        "y": 0
-      },
-      "rotation": 0,
-      "synchronize": false,
-      "transformMarkers": false,
-      "zoom": 1
-    },
     "3D Panel!39brp4i": {
       "autoSyncCameraState": false,
       "autoTextBackgroundColor": true,
       "cameraState": {
-        "distance": 25.991943570683752,
+        "distance": 31.383508991454484,
         "perspective": true,
-        "phi": 0.14104257530942232,
+        "phi": 0.973208377945937,
         "targetOffset": [
-          -2.3089454730805423,
-          3.19727629022388,
+          -2.4347842940691953,
+          6.16575366527566,
           0
         ],
-        "thetaOffset": -6.355127861284458,
+        "thetaOffset": -6.258349787566802,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
@@ -324,7 +333,9 @@ export const defaultLayout: PanelsState =
       "checkedKeys": [
         "name:Topics",
         "t:/registered_scan",
-        "t:/lc_cloud"
+        "t:/lc_cloud",
+        "t:/lc_mesh",
+        "t:/lc_dets"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -355,6 +366,26 @@ export const defaultLayout: PanelsState =
             "mode": "flat",
             "flatColor": {
               "r": 1,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
+        },
+        "t:/lc_dets": {
+          "colorMode": {
+            "mode": "gradient",
+            "colorField": "intensity",
+            "minValue": 0,
+            "maxValue": 255,
+            "minColor": {
+              "r": 0,
+              "g": 0,
+              "b": 1,
+              "a": 1
+            },
+            "maxColor": {
+              "r": 0,
               "g": 1,
               "b": 1,
               "a": 1
@@ -452,19 +483,14 @@ export const defaultLayout: PanelsState =
               "splitPercentage": 45.24422320898267
             },
             "second": {
-              "first": {
-                "first": "ImageViewPanel!1zvzdo3",
-                "second": "3D Panel!39brp4i",
-                "direction": "column",
-                "splitPercentage": 43.20576816417083
-              },
+              "first": "3D Panel!39brp4i",
               "second": {
                 "first": "Plot!2wjoy1g",
                 "second": "Plot!1vmemdl",
                 "direction": "column"
               },
               "direction": "row",
-              "splitPercentage": 49.19209266159842
+              "splitPercentage": 54.79396715600478
             },
             "direction": "row",
             "splitPercentage": 31.83082915971063
