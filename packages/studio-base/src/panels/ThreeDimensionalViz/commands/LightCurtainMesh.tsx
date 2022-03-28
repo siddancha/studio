@@ -13,13 +13,14 @@ import {
 import { LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
 
 type Uniforms = {
-  alpha: number;
   color: Vec4;
 };
 type Attributes = {
   point: REGL.Buffer;
 };
 type CommandProps = LightCurtainMesh;
+
+export const DEFAULT_COLOR = { r: 0, g: 0, b: 1, a: 0.3 };  // default is blue with 30% opacity
 
 function numVertices(marker: LightCurtainMesh): number {
   const { width, height } = marker;
@@ -142,11 +143,10 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
     frag: `
     precision mediump float;
 
-    uniform float alpha;
     uniform vec4 color;
 
     void main () {
-      gl_FragColor = vec4(color.r, color.g, color.b, alpha);
+      gl_FragColor = color;
     }
     `,
     blend: defaultBlend,
@@ -160,15 +160,9 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
     },
 
     uniforms: {
-      // make alpha a uniform so in the future it can be controlled by topic settings
-      alpha: (_context, props) => {
-        // TODO: expose a topic setting in studio so that the user can control this
-        return props.alpha ?? 1.0;
-      },
       // make color a uniform so in the future it can be controlled by topic settings
       color: (_context: unknown, props: LightCurtainMesh) => {
-        // TODO: expose a topic setting in studio so that the user can control this
-        const val = props.color ?? { r: 0, g: 0, b: 1, a: 1 };
+        const val = props.color ?? DEFAULT_COLOR;
         return toRGBA(val);
       }
     },
