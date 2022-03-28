@@ -311,7 +311,6 @@ export type LightCurtainMesh = Readonly<{
   header: Header;
   name: string;
   type: 203;
-  alpha?: number;
   color?: Color;
   pose: MutablePose;
   width: number;
