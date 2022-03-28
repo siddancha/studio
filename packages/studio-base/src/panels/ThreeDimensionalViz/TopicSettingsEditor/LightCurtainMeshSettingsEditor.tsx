@@ -1,19 +1,21 @@
 import { Box, Stack } from "@mui/material";
 
-import { LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
+import { Color, LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
+import ColorPicker from "@foxglove/studio-base/components/ColorPicker";
 import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
+import { DEFAULT_COLOR } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/LightCurtainMesh";
 
 import { TopicSettingsEditorProps } from ".";
-import { SLabel, SInput } from "./common";
+import { SLabel } from "./common";
 
 export type LightCurtainMeshSettings = {
-  alpha?: number;
+  color?: Color;
 };
 
 export default function LightCurtainMeshSettingsEditor(
   props: TopicSettingsEditorProps<LightCurtainMesh, LightCurtainMeshSettings>,
 ): JSX.Element {
-  const { message, settings, onSettingsChange } = props;
+  const { message, settings, onFieldChange } = props;
 
   if (!message) {
     return (
@@ -23,21 +25,13 @@ export default function LightCurtainMeshSettingsEditor(
     );
   }
 
-  const currentAlpha = settings.alpha ?? 0.5;
-
   return (
     <Stack flex="auto">
-      <SLabel>Alpha</SLabel>
-      <SInput
-        type="number"
-        value={currentAlpha}
-        placeholder="0.5"
-        onChange={(e) =>
-          onSettingsChange({
-            ...settings,
-            alpha: parseFloat(e.target.value),
-          })
-        }
+      <SLabel>Color</SLabel>
+      <ColorPicker
+        color={settings.color ?? DEFAULT_COLOR}
+        onChange={(newColor) => onFieldChange("color", newColor)}
+        alphaType="alpha"
       />
     </Stack>
   );
