@@ -124,14 +124,15 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
   const cache = new BufferCache(regl);
 
   return withPose<Uniforms, Attributes, CommandProps, Record<string, never>, REGL.DefaultContext>({
-    primitive: "triangle strip",
+    // REGL code copied from singleColor() in @foxglove/regl-worldview/src/commands/Triangles.js
+    primitive: "triangles",
 
     vert: `
     precision mediump float;
 
-    uniform mat4 projection, view;
-
     attribute vec3 point;
+
+    uniform mat4 projection, view;
 
     #WITH_POSE
 
