@@ -122,9 +122,9 @@ export const defaultLayout: PanelsState =
       "checkedKeys": [
         "name:Topics",
         "t:/registered_scan",
-        "t:/lc_cloud",
         "t:/lc_mesh",
-        "t:/lc_dets"
+        "t:/lc_dets",
+        "t:/dyn_map/gt_dynmap"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -333,9 +333,9 @@ export const defaultLayout: PanelsState =
       "checkedKeys": [
         "name:Topics",
         "t:/registered_scan",
-        "t:/lc_cloud",
         "t:/lc_mesh",
-        "t:/lc_dets"
+        "t:/lc_dets",
+        "t:/dyn_map/gt_dynmap"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
