@@ -126,9 +126,9 @@ export const defaultLayout: PanelsState =
         "t:/lc_dets",
         "t:/dyn_map/gt_dynmap"
       ],
-      "clickToPublishPoseTopic": "/move_base_simple/goal",
-      "clickToPublishPointTopic": "/clicked_point",
-      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseTopic": "",
+      "clickToPublishPointTopic": "/way_point",
+      "clickToPublishPoseEstimateTopic": "",
       "clickToPublishPoseEstimateXDeviation": 0.5,
       "clickToPublishPoseEstimateYDeviation": 0.5,
       "clickToPublishPoseEstimateThetaDeviation": 0.2617993877991494,
