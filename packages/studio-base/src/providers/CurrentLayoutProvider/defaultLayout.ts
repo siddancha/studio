@@ -16,22 +16,23 @@ export const defaultLayout: PanelsState =
       "autoSyncCameraState": false,
       "autoTextBackgroundColor": true,
       "cameraState": {
-        "distance": 8.118757409619885,
+        "distance": 13.214308282046543,
         "perspective": true,
-        "phi": 0,
+        "phi": 0.2979182916811192,
         "targetOffset": [
-          -2.2978896795965755,
-          3.9909282233871197,
+          1.9303443154698339,
+          0.2070949828456854,
           0
         ],
-        "thetaOffset": -1.5612511283791264e-17,
+        "thetaOffset": 7.8344438556671285,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
       },
       "checkedKeys": [
         "name:Topics",
-        "t:/lc_ve/dynmap"
+        "t:/lc_ve/dynmap",
+        "t:/robot"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -48,28 +49,30 @@ export const defaultLayout: PanelsState =
       "modifiedNamespaceTopics": [],
       "pinTopics": false,
       "settingsByKey": {},
-      "useThemeBackgroundColor": false
+      "useThemeBackgroundColor": false,
+      "followTf": "sensor"
     },
     "3D Panel!7njw9h": {
       "autoSyncCameraState": false,
       "autoTextBackgroundColor": true,
       "cameraState": {
-        "distance": 8.664446607105395,
+        "distance": 18.471240794241112,
         "perspective": true,
-        "phi": 0,
+        "phi": 0.12374835991989458,
         "targetOffset": [
-          -2.330334924479402,
-          4.0585511571781705,
+          2.0639289421232747,
+          0.5134653893312869,
           0
         ],
-        "thetaOffset": -1.734723475976807e-18,
+        "thetaOffset": 1.5528063904335678,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
       },
       "checkedKeys": [
         "name:Topics",
-        "t:/lc_ve/vismap"
+        "t:/lc_ve/vismap",
+        "t:/robot"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -86,7 +89,8 @@ export const defaultLayout: PanelsState =
       "modifiedNamespaceTopics": [],
       "pinTopics": false,
       "settingsByKey": {},
-      "useThemeBackgroundColor": true
+      "useThemeBackgroundColor": true,
+      "followTf": "sensor"
     },
     "ImageViewPanel!9fxu36": {
       "cameraTopic": "/lc_image",
@@ -106,15 +110,15 @@ export const defaultLayout: PanelsState =
       "autoSyncCameraState": false,
       "autoTextBackgroundColor": true,
       "cameraState": {
-        "distance": 23.19650664585766,
+        "distance": 18.578490024005834,
         "perspective": true,
-        "phi": 0.8146753528049449,
+        "phi": 0.9393711950629633,
         "targetOffset": [
-          -2.540010984185039,
-          3.7684042429831304,
+          -1.512605086511276,
+          1.471746447452175,
           0
         ],
-        "thetaOffset": 0.03785502174799692,
+        "thetaOffset": -31.396170064083726,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
@@ -124,6 +128,7 @@ export const defaultLayout: PanelsState =
         "t:/registered_scan",
         "t:/lc_mesh",
         "t:/lc_dets",
+        "t:/robot",
         "t:/dyn_map/gt_dynmap"
       ],
       "clickToPublishPoseTopic": "",
@@ -188,60 +193,23 @@ export const defaultLayout: PanelsState =
       "autoSyncCameraState": false,
       "autoTextBackgroundColor": true,
       "cameraState": {
-        "distance": 8.664446607105395,
+        "distance": 16.65189116484585,
         "perspective": true,
-        "phi": 0,
+        "phi": 0.0373368336614891,
         "targetOffset": [
-          -2.3089016164435066,
-          3.9089304524524806,
+          2.2268450813672565,
+          -0.14714851034001478,
           0
         ],
-        "thetaOffset": -0.000344448310963261,
+        "thetaOffset": -4.7023603409481725,
         "fovy": 0.7853981633974483,
         "near": 0.01,
         "far": 5000
       },
       "checkedKeys": [
         "name:Topics",
-        "t:/dyn_map/gt_dynmap"
-      ],
-      "clickToPublishPoseTopic": "/move_base_simple/goal",
-      "clickToPublishPointTopic": "/clicked_point",
-      "clickToPublishPoseEstimateTopic": "/initialpose",
-      "clickToPublishPoseEstimateXDeviation": 0.5,
-      "clickToPublishPoseEstimateYDeviation": 0.5,
-      "clickToPublishPoseEstimateThetaDeviation": 0.2617993877991494,
-      "customBackgroundColor": "#808080",
-      "diffModeEnabled": true,
-      "expandedKeys": [
-        "name:Topics"
-      ],
-      "followMode": "follow",
-      "modifiedNamespaceTopics": [],
-      "pinTopics": false,
-      "settingsByKey": {},
-      "useThemeBackgroundColor": false
-    },
-    "3D Panel!w21xy4": {
-      "autoSyncCameraState": false,
-      "autoTextBackgroundColor": true,
-      "cameraState": {
-        "targetOffset": [
-          -2.2954489975625023,
-          4.0412383897633894,
-          0
-        ],
-        "distance": 9.097157933157753,
-        "perspective": true,
-        "phi": 0,
-        "thetaOffset": -6.282828839351634,
-        "fovy": 0.7853981633974483,
-        "near": 0.01,
-        "far": 5000
-      },
-      "checkedKeys": [
-        "name:Topics",
-        "t:/dyn_map/gt_vismap"
+        "t:/dyn_map/gt_dynmap",
+        "t:/robot"
       ],
       "clickToPublishPoseTopic": "/move_base_simple/goal",
       "clickToPublishPointTopic": "/clicked_point",
@@ -259,7 +227,47 @@ export const defaultLayout: PanelsState =
       "pinTopics": false,
       "settingsByKey": {},
       "useThemeBackgroundColor": false,
-      "followTf": "map"
+      "followTf": "sensor"
+    },
+    "3D Panel!w21xy4": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "targetOffset": [
+          1.51826627038591,
+          -0.32104694838096,
+          0
+        ],
+        "distance": 13.524338169980489,
+        "perspective": true,
+        "phi": 0.11571309622933273,
+        "thetaOffset": -4.717485879062824,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/dyn_map/gt_vismap",
+        "t:/robot"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.2617993877991494,
+      "customBackgroundColor": "#808080",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {},
+      "useThemeBackgroundColor": false,
+      "followTf": "sensor"
     },
     "3D Panel!3m32xd7": {
       "autoSyncCameraState": false,
@@ -468,9 +476,9 @@ export const defaultLayout: PanelsState =
                 "splitPercentage": 49.41860465116279
               },
               "direction": "row",
-              "splitPercentage": 56.95364238410596
+              "splitPercentage": 56.77302829620711
             },
-            "splitPercentage": 31.842429216249485
+            "splitPercentage": 34.26343865408289
           }
         },
         {
