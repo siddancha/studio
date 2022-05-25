@@ -449,6 +449,270 @@ export const defaultLayout: PanelsState =
       "sidebarDimension": 240,
       "title": "Relative error in forecasting intervals"
     },
+    "3D Panel!19iv51e": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "distance": 11.992313643052455,
+        "perspective": true,
+        "phi": 0.2847050377265533,
+        "targetOffset": [
+          -2.3875925897484813,
+          3.4381993102556723,
+          0
+        ],
+        "thetaOffset": -0.03869633187575043,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/lc_ve/dynmap",
+        "t:/robot"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.26179939,
+      "customBackgroundColor": "#7d7d7d",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {},
+      "useThemeBackgroundColor": false,
+      "colorOverrideByVariable": {}
+    },
+    "3D Panel!1hyomy9": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "distance": 11.992313643052455,
+        "perspective": true,
+        "phi": 0.3954655944024172,
+        "targetOffset": [
+          -2.2272977792519697,
+          2.53889731925378,
+          0
+        ],
+        "thetaOffset": 0.005858123569793959,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/robot",
+        "t:/dyn_map/gt_dynmap"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.26179939,
+      "customBackgroundColor": "#7d7d7d",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {},
+      "useThemeBackgroundColor": false,
+      "colorOverrideByVariable": {}
+    },
+    "3D Panel!4kvigfx": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "distance": 20.502702304601673,
+        "perspective": true,
+        "phi": 0.20301348136399677,
+        "targetOffset": [
+          -2.0145992193130526,
+          2.6542326136316974,
+          0
+        ],
+        "thetaOffset": 0.0000471651023939805,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/robot",
+        "t:/lc_ve/vismap"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.26179939,
+      "customBackgroundColor": "#000000",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {},
+      "useThemeBackgroundColor": true
+    },
+    "3D Panel!1cekpsz": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "distance": 20.974631513659006,
+        "perspective": true,
+        "phi": 0.20301348136399677,
+        "targetOffset": [
+          -2.0145992193130526,
+          2.6542326136316974,
+          0
+        ],
+        "thetaOffset": 0.0000471651023939805,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/robot",
+        "t:/dyn_map/gt_vismap"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.26179939,
+      "customBackgroundColor": "#7d7d7d",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {},
+      "useThemeBackgroundColor": false,
+      "colorOverrideByVariable": {}
+    },
+    "3D Panel!2dz9hrf": {
+      "autoSyncCameraState": false,
+      "autoTextBackgroundColor": true,
+      "cameraState": {
+        "distance": 7.55860109771245,
+        "perspective": true,
+        "phi": 0,
+        "targetOffset": [
+          -2.641469897245401,
+          2.4963719261238824,
+          0
+        ],
+        "thetaOffset": 0.05340342532907777,
+        "fovy": 0.7853981633974483,
+        "near": 0.01,
+        "far": 5000
+      },
+      "checkedKeys": [
+        "name:Topics",
+        "t:/registered_scan",
+        "t:/lc_dets",
+        "t:/lc_mesh",
+        "t:/robot"
+      ],
+      "clickToPublishPoseTopic": "/move_base_simple/goal",
+      "clickToPublishPointTopic": "/clicked_point",
+      "clickToPublishPoseEstimateTopic": "/initialpose",
+      "clickToPublishPoseEstimateXDeviation": 0.5,
+      "clickToPublishPoseEstimateYDeviation": 0.5,
+      "clickToPublishPoseEstimateThetaDeviation": 0.26179939,
+      "customBackgroundColor": "#000000",
+      "diffModeEnabled": true,
+      "expandedKeys": [
+        "name:Topics"
+      ],
+      "followMode": "follow",
+      "modifiedNamespaceTopics": [],
+      "pinTopics": false,
+      "settingsByKey": {
+        "t:/registered_scan": {
+          "colorMode": {
+            "mode": "flat",
+            "flatColor": {
+              "r": 1,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
+        },
+        "t:/lc_dets": {
+          "colorMode": {
+            "mode": "gradient",
+            "colorField": "intensity",
+            "minColor": {
+              "r": 0,
+              "g": 0,
+              "b": 1,
+              "a": 1
+            },
+            "maxColor": {
+              "r": 0,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
+        }
+      },
+      "useThemeBackgroundColor": true
+    },
+    "Plot!4df13ra": {
+      "paths": [
+        {
+          "value": "/lc_ve/metrics.occ_recall",
+          "enabled": false,
+          "timestampMethod": "receiveTime"
+        },
+        {
+          "value": "/lc_ve/metrics.occ_f1score",
+          "enabled": false,
+          "timestampMethod": "receiveTime"
+        },
+        {
+          "value": "/lc_ve/metrics.occ_iou",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        },
+        {
+          "value": "/lc_ve/metrics.fcast_interval",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        }
+      ],
+      "minYValue": "",
+      "maxYValue": "",
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
     "Tab!lb68hr": {
       "activeTabIdx": 0,
       "tabs": [
@@ -502,6 +766,34 @@ export const defaultLayout: PanelsState =
             },
             "direction": "row",
             "splitPercentage": 31.83082915971063
+          }
+        },
+        {
+          "title": "Metrics",
+          "layout": {
+            "first": {
+              "first": "3D Panel!19iv51e",
+              "second": "3D Panel!1hyomy9",
+              "direction": "column",
+              "splitPercentage": 47.02319183338562
+            },
+            "second": {
+              "first": {
+                "first": {
+                  "first": "3D Panel!4kvigfx",
+                  "second": "3D Panel!1cekpsz",
+                  "direction": "row"
+                },
+                "second": "3D Panel!2dz9hrf",
+                "direction": "column",
+                "splitPercentage": 57.29420566160678
+              },
+              "second": "Plot!4df13ra",
+              "direction": "row",
+              "splitPercentage": 46.007371007371006
+            },
+            "direction": "row",
+            "splitPercentage": 26.34386540828888
           }
         }
       ]
