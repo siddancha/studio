@@ -11,6 +11,8 @@ import { LaunchPreferenceScreen } from "./LaunchPreferenceScreen";
 import { LaunchingInDesktopScreen } from "./LaunchingInDesktopScreen";
 
 export function LaunchPreference(props: PropsWithChildren<unknown>): JSX.Element {
+  return <>{props.children}</>;  // SID: always launch web version without showing launch preference screen
+
   const [globalLaunchPreference = "unknown"] = useAppConfigurationValue<string>(
     AppSetting.LAUNCH_PREFERENCE,
   );
