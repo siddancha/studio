@@ -6,7 +6,7 @@ import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
 import { DEFAULT_COLOR } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/LightCurtainMesh";
 
 import { TopicSettingsEditorProps } from ".";
-import { SLabel } from "./common";
+import { SLabel } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/styling";
 
 export type LightCurtainMeshSettings = {
   color?: Color;
