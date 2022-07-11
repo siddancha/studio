@@ -18,12 +18,12 @@ import UrdfSettingsEditor from "@foxglove/studio-base/panels/ThreeDimensionalViz
 import { TopicSettingsEditorProps } from "@foxglove/studio-base/panels/ThreeDimensionalViz/TopicSettingsEditor/types";
 import { FOXGLOVE_GRID_DATATYPE, URDF_DATATYPE } from "@foxglove/studio-base/util/globalConstants";
 
+import LightCurtainMeshSettingsEditor from "./LightCurtainMeshSettingsEditor"
 import MarkerSettingsEditor from "./MarkerSettingsEditor";
 import OccupancyGridSettingsEditor from "./OccupancyGridSettingsEditor";
 import PointCloudSettingsEditor from "./PointCloudSettingsEditor";
 import PoseListSettingsEditor from "./PoseListSettingsEditor";
 import PoseSettingsEditor from "./PoseSettingsEditor";
-import LightCurtainMeshSettingsEditor from "./LightCurtainMeshSettingsEditor"
 
 export type { TopicSettingsEditorProps } from "./types";
 

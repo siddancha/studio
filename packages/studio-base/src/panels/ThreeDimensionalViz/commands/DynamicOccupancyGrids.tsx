@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import type REGL from "regl";
 
 import { Command, withPose, defaultBlend, CommonCommandProps } from "@foxglove/regl-worldview";
@@ -31,7 +35,7 @@ function getTextureOptions(marker:DynamicOccupancyGridMessage): REGL.Texture2DOp
   return {
     format: "rgb",
     mipmap: false,
-    data: data,
+    data,
     width: info.width,
     height: info.height,
   };

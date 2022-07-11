@@ -551,7 +551,10 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
         }
       } else if (field.name === "intensity") {
         iReader = getReader(field, pointCloud.point_step);
-        if (!iReader) iReader = zeroReader;  // if intensity field is missing, simply set it to zero
+        if (!iReader) {
+          // if intensity field is missing, simply set it to zero
+          iReader = zeroReader;
+        }
       }
 
       const byteWidth = pointFieldWidth(field.datatype);
@@ -661,19 +664,19 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
       const intensity = iReader(view, pointOffset);
 
       // Filter out point if intensity below ithresh
-      if (intensity < settings.ithresh) continue;
+      if (intensity < settings.ithresh) { continue; }
 
       // Filter out point if x is beyond limits
-      if (x != undefined && x < settings.minX!) continue;
-      if (x != undefined && x > settings.maxX!) continue;
+      if (settings.minX != undefined && x < settings.minX) { continue; }
+      if (settings.maxX != undefined && x > settings.maxX) { continue; }
 
       // Filter out point if y is beyond limits
-      if (y != undefined && y < settings.minY!) continue;
-      if (y != undefined && y > settings.maxY!) continue;
+      if (settings.minY != undefined && y < settings.minY) { continue; }
+      if (settings.maxY != undefined && y > settings.maxY) { continue; }
 
       // Filter out point if z is beyond limits
-      if (z != undefined && z < settings.minZ!) continue;
-      if (z != undefined && z > settings.maxZ!) continue;
+      if (settings.minZ != undefined && z < settings.minZ) { continue; }
+      if (settings.maxZ != undefined && z > settings.maxZ) { continue; }
 
       // Compute color
       const colorValue = colorReader(view, pointOffset);
@@ -687,8 +690,9 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     }
 
     // update size to the number of filtered points
-    if (numFilteredPoints != pointCount)
+    if (numFilteredPoints !== pointCount) {
       entry.points.geometry.resize(numFilteredPoints);
+    }
 
     positionAttribute.needsUpdate = true;
     colorAttribute.needsUpdate = true;
