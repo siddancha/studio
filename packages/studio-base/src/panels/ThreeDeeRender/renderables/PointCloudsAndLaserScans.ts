@@ -51,6 +51,13 @@ export type LayerSettingsPointCloudAndLaserScan = BaseSettings & {
   rgbByteOrder: "rgba" | "bgra" | "abgr";
   minValue: number | undefined;
   maxValue: number | undefined;
+  ithresh: number;
+  minX: number | undefined;
+  maxX: number | undefined;
+  minY: number | undefined;
+  maxY: number | undefined;
+  minZ: number | undefined;
+  maxZ: number | undefined;
 };
 
 type Material = THREE.PointsMaterial | LaserScanMaterial;
@@ -61,6 +68,7 @@ type PointCloudFieldReaders = {
   xReader: FieldReader;
   yReader: FieldReader;
   zReader: FieldReader;
+  iReader: FieldReader;
   colorReader: FieldReader;
 };
 
@@ -97,6 +105,13 @@ const DEFAULT_SETTINGS: LayerSettingsPointCloudAndLaserScan = {
   rgbByteOrder: DEFAULT_RGB_BYTE_ORDER,
   minValue: undefined,
   maxValue: undefined,
+  ithresh: 0,
+  minX: undefined,
+  maxX: undefined,
+  minY: undefined,
+  maxY: undefined,
+  minZ: undefined,
+  maxZ: undefined,
 };
 
 const POINTCLOUD_DATATYPES = new Set<string>([
@@ -151,6 +166,7 @@ const tempFieldReaders: PointCloudFieldReaders = {
   xReader: zeroReader,
   yReader: zeroReader,
   zReader: zeroReader,
+  iReader: zeroReader,
   colorReader: zeroReader,
 };
 
@@ -522,19 +538,18 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     latestEntry.receiveTime = receiveTime;
     latestEntry.messageTime = messageTime;
 
-    const pointCount = Math.trunc(pointCloud.data.length / getStride(pointCloud));
-    latestEntry.points.geometry.resize(pointCount);
-    const positionAttribute = latestEntry.points.geometry.attributes.position!;
-    const colorAttribute = latestEntry.points.geometry.attributes.color!;
+    // SID: these operations have been moved to _updatePointCloudBuffers()
+    // const pointCount = Math.trunc(pointCloud.data.length / pointCloud.point_step);
+    // latestEntry.points.geometry.resize(pointCount);
+    // const positionAttribute = latestEntry.points.geometry.attributes.position!;
+    // const colorAttribute = latestEntry.points.geometry.attributes.color!;
 
     // Iterate the point cloud data to update position and color attributes
     this._updatePointCloudBuffers(
       pointCloud,
       tempFieldReaders,
-      pointCount,
-      settings,
-      positionAttribute,
-      colorAttribute,
+      latestEntry,
+      settings
     );
   }
 
@@ -625,6 +640,7 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     let xReader: FieldReader | undefined;
     let yReader: FieldReader | undefined;
     let zReader: FieldReader | undefined;
+    let iReader: FieldReader | undefined;
     let colorReader: FieldReader | undefined;
 
     const stride = getStride(pointCloud);
@@ -676,6 +692,11 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
           invalidPointCloudOrLaserScanError(this.renderer, renderable, message);
           return false;
         }
+      } else if (field.name === "intensity") {
+        iReader = getReader(field, stride);
+        if (!iReader) {  // if intensity field is missing, simply set it to zero
+          iReader = zeroReader;
+        }
       }
 
       const byteWidth = pointFieldWidth(type);
@@ -716,6 +737,7 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     output.xReader = xReader ?? zeroReader;
     output.yReader = yReader ?? zeroReader;
     output.zReader = zReader ?? zeroReader;
+    output.iReader = iReader ?? zeroReader;
     output.colorReader = colorReader ?? xReader ?? yReader ?? zReader ?? zeroReader;
     return true;
   }
@@ -752,15 +774,22 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
   _updatePointCloudBuffers(
     pointCloud: PointCloud | PointCloud2,
     readers: PointCloudFieldReaders,
-    pointCount: number,
+    entry: PointsAtTime,
     settings: LayerSettingsPointCloudAndLaserScan,
-    positionAttribute: THREE.BufferAttribute,
-    colorAttribute: THREE.BufferAttribute,
   ): void {
     const data = pointCloud.data;
     const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
     const pointStep = getStride(pointCloud);
-    const { xReader, yReader, zReader, colorReader } = readers;
+    const { xReader, yReader, zReader, iReader, colorReader } = readers;
+
+    // the original number of points
+    const pointCount = Math.trunc(pointCloud.data.length / pointStep);
+
+    // initially set the point count to the number of points in the message before filtering
+    entry.points.geometry.resize(pointCount);
+
+    const positionAttribute = entry.points.geometry.attributes.position!;
+    const colorAttribute = entry.points.geometry.attributes.color!;
 
     // Iterate the point cloud data to determine min/max color values (if needed)
     this._minMaxColorValues(tempMinMaxColor, colorReader, view, pointCount, pointStep, settings);
@@ -769,20 +798,46 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     // Build a method to convert raw color field values to RGBA
     const colorConverter = getColorConverter(settings, minColorValue, maxColorValue);
 
+    // the number of points remaining after filtering
+    let numFilteredPoints = 0;
+
     for (let i = 0; i < pointCount; i++) {
       const pointOffset = i * pointStep;
 
-      // Update position attribute
       const x = xReader(view, pointOffset);
       const y = yReader(view, pointOffset);
       const z = zReader(view, pointOffset);
-      positionAttribute.setXYZ(i, x, y, z);
+      const intensity = iReader(view, pointOffset);
 
-      // Update color attribute
+      // Filter out point if intensity below ithresh
+      if (intensity < settings.ithresh) {continue;}
+
+      // Filter out point if x is beyond limits
+      if (x != undefined && x < settings.minX!) {continue;}
+      if (x != undefined && x > settings.maxX!) {continue;}
+
+      // Filter out point if y is beyond limits
+      if (y != undefined && y < settings.minY!) {continue;}
+      if (y != undefined && y > settings.maxY!) {continue;}
+
+      // Filter out point if z is beyond limits
+      if (z != undefined && z < settings.minZ!) {continue;}
+      if (z != undefined && z > settings.maxZ!) {continue;}
+
+      // Compute color
       const colorValue = colorReader(view, pointOffset);
       colorConverter(tempColor, colorValue);
-      colorAttribute.setXYZW(i, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
+
+      // Update position and color attributes
+      positionAttribute.setXYZ(numFilteredPoints, x, y, z);
+      colorAttribute.setXYZW(numFilteredPoints, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
+
+      numFilteredPoints++;
     }
+
+    // update size to the number of filtered points
+    if (numFilteredPoints != pointCount)
+      {entry.points.geometry.resize(numFilteredPoints);}
 
     positionAttribute.needsUpdate = true;
     colorAttribute.needsUpdate = true;
@@ -1233,6 +1288,13 @@ function settingsNode(
   const rgbByteOrder = config.rgbByteOrder ?? "rgba";
   const minValue = config.minValue;
   const maxValue = config.maxValue;
+  const ithresh = config.ithresh;
+  const minX = config.minX;
+  const maxX = config.maxX;
+  const minY = config.minY;
+  const maxY = config.maxY;
+  const minZ = config.minZ;
+  const maxZ = config.maxZ;
 
   const fields: SettingsTreeFields = {};
   fields.pointSize = {
@@ -1257,6 +1319,62 @@ function settingsNode(
     precision: 3,
     value: decayTime,
   };
+  // SID: add ithresh field
+  fields.ithresh = {
+    label: "Filter: IThresh",
+    input: "number",
+    placeholder: "0",
+    precision: 1,
+    value: ithresh,
+  }
+  // SID: add minX field
+  fields.minX = {
+    label: "Filter: X min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minX,
+  }
+  // SID: add maxX field
+  fields.maxX = {
+    label: "Filter: X max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxX,
+  }
+  // SID: add minY field
+  fields.minY = {
+    label: "Filter: Y min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minY,
+  }
+  // SID: add maxY field
+  fields.maxY = {
+    label: "Filter: Y max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxY,
+  }
+  // SID: add minZ field
+  fields.minZ = {
+    label: "Filter: Z min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minZ,
+  }
+  // SID: add maxZ field
+  fields.maxZ = {
+    label: "Filter: Z max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxZ,
+  }
   fields.colorMode = {
     label: "Color mode",
     input: "select",
