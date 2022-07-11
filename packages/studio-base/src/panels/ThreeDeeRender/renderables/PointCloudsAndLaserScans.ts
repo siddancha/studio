@@ -42,6 +42,12 @@ export type LayerSettingsPointCloudAndLaserScan = BaseSettings & {
   minValue: number | undefined;
   maxValue: number | undefined;
   ithresh: number;
+  minX: number | undefined;
+  maxX: number | undefined;
+  minY: number | undefined;
+  maxY: number | undefined;
+  minZ: number | undefined;
+  maxZ: number | undefined;
 };
 
 type Material = THREE.PointsMaterial | LaserScanMaterial;
@@ -89,6 +95,12 @@ const DEFAULT_SETTINGS: LayerSettingsPointCloudAndLaserScan = {
   minValue: undefined,
   maxValue: undefined,
   ithresh: 0,
+  minX: undefined,
+  maxX: undefined,
+  minY: undefined,
+  maxY: undefined,
+  minZ: undefined,
+  maxZ: undefined,
 };
 
 const POINT_SHAPE_OPTIONS = [
@@ -651,6 +663,18 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
       // Filter out point if intensity below ithresh
       if (intensity < settings.ithresh) continue;
 
+      // Filter out point if x is beyond limits
+      if (x != undefined && x < settings.minX!) continue;
+      if (x != undefined && x > settings.maxX!) continue;
+
+      // Filter out point if y is beyond limits
+      if (y != undefined && y < settings.minY!) continue;
+      if (y != undefined && y > settings.maxY!) continue;
+
+      // Filter out point if z is beyond limits
+      if (z != undefined && z < settings.minZ!) continue;
+      if (z != undefined && z > settings.maxZ!) continue;
+
       // Compute color
       const colorValue = colorReader(view, pointOffset);
       colorConverter(tempColor, colorValue);
@@ -1110,6 +1134,12 @@ function settingsNode(
   const minValue = config.minValue;
   const maxValue = config.maxValue;
   const ithresh = config.ithresh;
+  const minX = config.minX;
+  const maxX = config.maxX;
+  const minY = config.minY;
+  const maxY = config.maxY;
+  const minZ = config.minZ;
+  const maxZ = config.maxZ;
 
   const fields: SettingsTreeFields = {};
   fields.pointSize = {
@@ -1141,6 +1171,54 @@ function settingsNode(
     placeholder: "0",
     precision: 1,
     value: ithresh,
+  }
+  // SID: add minX field
+  fields.minX = {
+    label: "Filter: X min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minX,
+  }
+  // SID: add maxX field
+  fields.maxX = {
+    label: "Filter: X max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxX,
+  }
+  // SID: add minY field
+  fields.minY = {
+    label: "Filter: Y min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minY,
+  }
+  // SID: add maxY field
+  fields.maxY = {
+    label: "Filter: Y max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxY,
+  }
+  // SID: add minZ field
+  fields.minZ = {
+    label: "Filter: Z min",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: minZ,
+  }
+  // SID: add maxZ field
+  fields.maxZ = {
+    label: "Filter: Z max",
+    input: "number",
+    placeholder: "auto",
+    precision: 4,
+    value: maxZ,
   }
   fields.colorMode = {
     label: "Color mode",
