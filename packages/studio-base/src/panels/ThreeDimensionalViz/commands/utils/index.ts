@@ -12,9 +12,10 @@
 //   You may not use this file except in compliance with the License.
 import type REGL from "regl";
 import tinycolor from "tinycolor2";
-import { toolsColorScheme } from "@foxglove/studio-base/util/toolsColorScheme";
 
 import { GridMessage } from "@foxglove/studio-base/types/Messages";
+import { toolsColorScheme } from "@foxglove/studio-base/util/toolsColorScheme";
+
 
 export const COLORS = {
   BLACK: tinycolor("black"),

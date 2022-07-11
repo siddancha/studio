@@ -15,6 +15,6 @@ export { default as PoseMarkers } from "./PoseMarkers";
 export { default as OccupancyGrids } from "./OccupancyGrids";
 export { default as DynamicOccupancyGrids } from "./DynamicOccupancyGrids";
 export { default as VisibilityGrids } from "./VisibilityGrids";
-export { default as LightCurtainMeshs } from "./LightCurtainMesh";
+export { default as LightCurtainMesh } from "./LightCurtainMesh";
 export { default as PointClouds } from "./PointClouds";
 export { default as LinedConvexHulls } from "./LinedConvexHulls";

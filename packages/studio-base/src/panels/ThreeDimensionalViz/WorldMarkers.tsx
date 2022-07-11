@@ -31,7 +31,7 @@ import {
   OccupancyGrids,
   DynamicOccupancyGrids,
   VisibilityGrids,
-  LightCurtainMeshs,
+  LightCurtainMesh,
   PointClouds,
   PoseMarkers,
   LinedConvexHulls,
@@ -219,9 +219,9 @@ export default function WorldMarkers({
       <VisibilityGrids layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
         {visgrid}
       </VisibilityGrids>
-      <LightCurtainMeshs layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
+      <LightCurtainMesh layerIndex={(layerIndex as number) + LAYER_INDEX_OCCUPANCY_GRIDS}>
         {lcmesh}
-      </LightCurtainMeshs>
+      </LightCurtainMesh>
       {/* Render PointClouds first so other markers with the same zIndex can show on top of PointClouds. */}
       <PointClouds layerIndex={layerIndex} clearCachedMarkers={clearCachedMarkers}>
         {pointcloud}

@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import type REGL from "regl";
 
 import {
@@ -9,7 +13,6 @@ import {
   Vec4,
   toRGBA
 } from "@foxglove/regl-worldview";
-
 import { LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
 
 type Uniforms = {
@@ -59,7 +62,7 @@ class BufferCacheEntry {
         vertices[p++] = point[0];
         vertices[p++] = point[1];
         vertices[p++] = point[2];
-      };
+      }
     }
 
     for (let r = 0; r < height - 1; r++)
@@ -156,7 +159,7 @@ const lightCurtainMesh = (regl: REGL.Regl) =>
 
     attributes: {
       point: (_context, props: LightCurtainMesh) => {
-        return cache.get(props);;
+        return cache.get(props);
       }
     },
 
@@ -178,7 +181,7 @@ type Props = CommonCommandProps & {
   children: React.ReactNode;
 };
 
-export default function LightCurtainMeshs(props: Props): JSX.Element {
+export default function LightCurtainMesh(props: Props): JSX.Element {
   // We can click through OccupancyGrids.
   return <Command getChildrenForHitmap={undefined} {...props} reglCommand={lightCurtainMesh} />;
 }

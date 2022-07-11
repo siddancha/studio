@@ -1,12 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import { Box, Stack } from "@mui/material";
 
-import { Color, LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
 import ColorPicker from "@foxglove/studio-base/components/ColorPicker";
-import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
+import { SLabel } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/styling";
 import { DEFAULT_COLOR } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/LightCurtainMesh";
+import { Color, LightCurtainMesh } from "@foxglove/studio-base/types/Messages";
+import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
 
 import { TopicSettingsEditorProps } from ".";
-import { SLabel } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/styling";
+
 
 export type LightCurtainMeshSettings = {
   color?: Color;
