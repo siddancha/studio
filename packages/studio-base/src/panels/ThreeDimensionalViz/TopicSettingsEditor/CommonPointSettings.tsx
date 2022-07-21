@@ -41,7 +41,7 @@ export default function CommonPointSettings({
   const pointShape = settings.pointShape;
   const pointShapeVal = pointShape ?? defaultPointShape;
 
-  const alphaVal = settings.alpha ?? 1.0;  // 1 should always be the default for alpha
+  const alphaVal = settings.alpha ?? 1;  // 1 should always be the default for alpha
 
   return (
     <Stack flex="auto" gap={1}>
