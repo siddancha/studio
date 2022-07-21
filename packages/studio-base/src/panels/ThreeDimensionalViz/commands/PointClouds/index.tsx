@@ -51,6 +51,7 @@ enum ShaderColorMode {
 type Uniforms = {
   pointSize: number;
   isCircle: boolean;
+  alpha: number;
   colorMode: ShaderColorMode;
   flatColor: [number, number, number, number];
   minGradientColor: [number, number, number, number];
@@ -76,6 +77,7 @@ attribute float color; // color values in range [0-255]
 
 uniform float pointSize;
 uniform lowp int colorMode;
+uniform float alpha;
 uniform vec4 flatColor;
 uniform vec4 minGradientColor;
 uniform vec4 maxGradientColor;
@@ -155,13 +157,13 @@ void main () {
   gl_Position = projection * view * vec4(p, 1);
 
   if (colorMode == ${ShaderColorMode.GRADIENT}) {
-    fragColor = vec4(gradientColor(), 1.0);
+    fragColor = vec4(gradientColor(), alpha);
   } else if (colorMode == ${ShaderColorMode.RAINBOW}) {
-    fragColor = vec4(rainbowColor(), 1.0);
+    fragColor = vec4(rainbowColor(), alpha);
   } else if (colorMode == ${ShaderColorMode.TURBO}) {
-    fragColor = vec4(turboColor(), 1.0);
+    fragColor = vec4(turboColor(), alpha);
   } else {
-    fragColor = vec4(flatColor.rgb, 1.0);
+    fragColor = vec4(flatColor.rgb, alpha);
   }
 }
 `;
@@ -194,6 +196,7 @@ void main () {
 const fragmentShader = `
 precision mediump float;
 varying vec4 fragColor;
+uniform float alpha;
 uniform bool isCircle;
 uniform lowp int colorMode;
 void main () {
@@ -211,7 +214,7 @@ void main () {
   if (colorMode == ${ShaderColorMode.RGBA}) {
     gl_FragColor = vec4(fragColor / 255.0);
   } else {
-    gl_FragColor = vec4(fragColor.rgb / 255.0, 1.0);
+    gl_FragColor = vec4(fragColor.rgb / 255.0, alpha);
   }
 }
 `;
@@ -358,6 +361,9 @@ const makePointCloudCommand = () => {
           return props.settings.pointShape != undefined
             ? props.settings.pointShape === "circle"
             : true;
+        },
+        alpha: (_context, props) => {
+          return props.settings.alpha ?? 1.0;
         },
         colorMode: (_context, props) => getEffectiveColorMode(props),
         flatColor: (_context, props) => {

@@ -32,6 +32,7 @@ export default function CommonPointSettings({
   settings: {
     pointSize?: number;
     pointShape?: string;
+    alpha?: number;
   };
   onFieldChange: (name: string, value: unknown) => void;
 }): JSX.Element {
@@ -39,6 +40,8 @@ export default function CommonPointSettings({
 
   const pointShape = settings.pointShape;
   const pointShapeVal = pointShape ?? defaultPointShape;
+
+  const alphaVal = settings.alpha ?? 1.0;  // 1 should always be the default for alpha
 
   return (
     <Stack flex="auto" gap={1}>
@@ -79,6 +82,24 @@ export default function CommonPointSettings({
           <MenuItem value="square">Square</MenuItem>
         </Select>
       </FormControl>
+
+      <TextField
+        label="Alpha"
+        data-test="alpha"
+        type="number"
+        placeholder="1.0"
+        value={alphaVal}
+        variant="filled"
+        inputProps={{
+          min: 0.0,
+          max: 1.0,
+          step: 0.01,
+        }}
+        onChange={(e) => {
+          const isInputValid = !isNaN(parseFloat(e.target.value));
+          onFieldChange("alpha", isInputValid ? parseFloat(e.target.value) : undefined);
+        }}
+      />
     </Stack>
   );
 }

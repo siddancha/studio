@@ -51,6 +51,7 @@ import { TopicSettingsEditorProps } from "./types";
 export type PointCloudSettings = {
   pointSize?: number;
   pointShape?: string;
+  alpha?: number;
   decayTime?: number;
   colorMode?: ColorMode;
 };
